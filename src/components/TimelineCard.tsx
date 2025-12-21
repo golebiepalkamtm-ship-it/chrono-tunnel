@@ -4,7 +4,7 @@ import { useRef } from "react";
 interface TimelineEvent {
   year: number;
   title: string;
-  description: string;
+  achievements: string[];
   highlight?: string;
 }
 
@@ -90,10 +90,15 @@ const TimelineCard = ({ event, index, isActive }: TimelineCardProps) => {
             {event.title}
           </h3>
 
-          {/* Description */}
-          <p className="text-muted-foreground leading-relaxed">
-            {event.description}
-          </p>
+          {/* Achievements List */}
+          <ul className="space-y-1.5 text-sm text-muted-foreground">
+            {event.achievements.map((achievement, i) => (
+              <li key={i} className="flex items-start gap-2">
+                <span className="text-primary mt-1 text-xs">●</span>
+                <span>{achievement}</span>
+              </li>
+            ))}
+          </ul>
 
           {/* Decorative Line */}
           <motion.div 
