@@ -5,40 +5,118 @@ import ProgressBar from "./ProgressBar";
 
 const timelineEvents = [
   {
+    year: 2001,
+    title: "Sezon 2001",
+    description: "Oddział Lubań – A Mistrz (235,77 pkt) • Oddział Lubań – B I Wicemistrz (503,62 pkt) • Oddział Lubań – GMO Mistrz • Okręg Jelenia Góra – A I Wicemistrz (235,77 pkt) • Okręg Jelenia Góra – B IX Przodownik (503,62 pkt) • Okręg Jelenia Góra – GMO I Wicemistrz",
+    highlight: "6 osiągnięć",
+  },
+  {
+    year: 2002,
+    title: "Sezon 2002",
+    description: "Oddział Lubań – A Mistrz (501,52 pkt) • Oddział Lubań – GMO II Wicemistrz (40 pkt) • Okręg Jelenia Góra – A Mistrz (501,52 pkt) • Okręg Jelenia Góra – GMO Mistrz (40 pkt) • Region V – A 50 Przodownik (501,52 pkt) • Region V – B II Przodownik (168,11 pkt)",
+    highlight: "6 osiągnięć",
+  },
+  {
+    year: 2003,
+    title: "Sezon 2003",
+    description: "Oddział Lubań – A/B/C/GMO Mistrz • Okręg Jelenia Góra – A/C Mistrz, B I Wicemistrz, GMO VI Przodownik • Region V – A 10, B 49, C 2 Miejsce (971,99 pkt), D II, GMP 11 Przodownik • MP – C 13, GMP 28 Przodownik (1066,26 pkt)",
+    highlight: "15 osiągnięć",
+  },
+  {
+    year: 2004,
+    title: "Sezon 2004",
+    description: "Oddział Lubań – A/B Mistrz, GMO I Wicemistrz • Okręg Jelenia Góra – A Mistrz, B I Przodownik, GMO I Przodownik • Region V – A 18, D 35 Przodownik (839,32 pkt) • MP – A 32 Przodownik (180,91 pkt)",
+    highlight: "9 osiągnięć",
+  },
+  {
+    year: 2005,
+    title: "Sezon 2005",
+    description: "Oddział Lubań – A/B Mistrz, GMO I Wicemistrz • Okręg Jelenia Góra – A/B Mistrz, GMO I Przodownik • Region V – A II Wicemistrz (90,65 pkt) • MP – A I, B V Przodownik",
+    highlight: "9 osiągnięć",
+  },
+  {
+    year: 2006,
+    title: "Sezon 2006",
+    description: "Oddział Lubań – A/B/GMO Mistrz (240,15/183,25/82,77 pkt) • Okręg Jelenia Góra – A Mistrz (199,28 pkt), B II Przodownik, GMO I Wicemistrz • Region V – A 18, B 24, GMO 3 Przodownik • MP – GMO VI Przodownik",
+    highlight: "10 osiągnięć",
+  },
+  {
+    year: 2007,
+    title: "Sezon 2007",
+    description: "Oddział Lubań – A Mistrz (78,06 pkt), GMO II Wicemistrz • Okręg Jelenia Góra – A Mistrz • Region V – A II Przodownik • MP – A I Przodownik (78,06 pkt)",
+    highlight: "5 osiągnięć",
+  },
+  {
+    year: 2008,
+    title: "Sezon 2008",
+    description: "Oddział Lubań – A/B Mistrz • Okręg Jelenia Góra – A Mistrz, B II Wicemistrz • Region V – A Mistrz (49,88 pkt), B XX Przodownik, GMP I Wicemistrz, GMP 20 Przodownik • MP – A 3 Przodownik",
+    highlight: "9 osiągnięć",
+  },
+  {
+    year: 2009,
+    title: "Sezon 2009",
+    description: "Ogólnopolski – GMP 148 Przodownik (1401,99 pkt)",
+    highlight: "1 osiągnięcie",
+  },
+  {
+    year: 2011,
+    title: "Sezon 2011",
+    description: "Oddział – Total dorosłych/A/B/C/M/D/H/Roczne Mistrz • Okręg – A/B/C/D/M Mistrz • Region V – B/D Mistrz",
+    highlight: "15 osiągnięć",
+  },
+  {
+    year: 2012,
+    title: "Sezon 2012",
+    description: "MP – Maraton 8, Olimpijskie 68 Przodownik • Oddział – A/B/M Maraton/D/GMO/H/Roczne/Olimpijskie/Total dorośli I Mistrz, C II Wicemistrz, Total młodzi II Wicemistrz",
+    highlight: "13 osiągnięć",
+  },
+  {
     year: 2013,
-    title: "The Genesis",
-    description: "Our journey began in a small garage with nothing but a dream and relentless determination. Three founders, one vision: to revolutionize how people interact with technology.",
-    highlight: "Founded",
+    title: "Sezon 2013",
+    description: "MP – B 13, Roczne 9 Przodownik, A II Wicemistrz (66,43 pkt) • Region V – GMP 68 Przodownik, A I Wicemistrz, B/Roczne/D Przodownik • Oddział – A/B/D/H Mistrz, 5 najlepszych młodzi Mistrz • Okręg – A/B/H Mistrz",
+    highlight: "21 osiągnięć",
+  },
+  {
+    year: 2014,
+    title: "Sezon 2014",
+    description: "MP – B Mistrz (661,38 pkt), A Mistrz (116,13 pkt), Klasa Sport A 22 Miejsce • Oddział – A/B/D/H/Roczne I Mistrz, C 5, Lotniki 2 Przodownik",
+    highlight: "10 osiągnięć",
   },
   {
     year: 2015,
-    title: "First Major Breakthrough",
-    description: "After countless iterations, we launched our first product. The response exceeded all expectations, validating our approach and fueling our ambition for bigger things.",
-    highlight: "Launch",
+    title: "Sezon 2015",
+    description: "MP – A Mistrz (86,77 pkt), B 1 Przodownik (71,68 pkt) • Oddział – A/B/C/D I Mistrz",
+    highlight: "6 osiągnięć",
   },
   {
     year: 2017,
-    title: "Global Expansion",
-    description: "Opening offices in London, Tokyo, and São Paulo marked our transformation from startup to global force. Our team grew from 15 to 200 passionate innovators.",
-    highlight: "Growth",
+    title: "Sezon 2017",
+    description: "MP – GMP 54 Przodownik (148,16 pkt) • Oddział – A/B 1 Przodownik",
+    highlight: "3 osiągnięcia",
+  },
+  {
+    year: 2018,
+    title: "Sezon 2018",
+    description: "MP – A I Wicemistrz (25,94 pkt) • Oddział – Total 16 Przodownik (XIII) (942,69 pkt), A/B I Mistrz",
+    highlight: "4 osiągnięcia",
   },
   {
     year: 2019,
-    title: "Industry Recognition",
-    description: "Named 'Most Innovative Company' by leading tech publications. Our platform now serves millions of users across 50 countries, pushing the boundaries of what's possible.",
-    highlight: "Award",
+    title: "Sezon 2019",
+    description: "Oddział – A I Mistrz (82,76 pkt), B I Mistrz (130,64 pkt)",
+    highlight: "2 osiągnięcia",
   },
   {
     year: 2021,
-    title: "The Next Frontier",
-    description: "Embracing AI and machine learning, we unveiled our next-generation platform. A quantum leap in capability that redefined industry standards.",
-    highlight: "AI Era",
+    title: "Sezon 2021",
+    description: "MP – A 61 Przodownik (249,85 pkt)",
+    highlight: "1 osiągnięcie",
   },
   {
-    year: 2023,
-    title: "Shaping Tomorrow",
-    description: "Today, we stand at the forefront of innovation, continuously evolving and adapting. Our mission remains unchanged: empowering people through technology.",
-    highlight: "Present",
+    year: 2024,
+    title: "Sezon 2024",
+    description: "MP – A 13 Przodownik (85,05 pkt)",
+    highlight: "1 osiągnięcie",
   },
 ];
 
@@ -142,10 +220,10 @@ const TimeTunnel = () => {
             animate={{ opacity: [0.8, 1, 0.8] }}
             transition={{ duration: 3, repeat: Infinity }}
           >
-            OUR JOURNEY
+            HISTORIA OSIĄGNIĘĆ
           </motion.h1>
           <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto">
-            Scroll through time and discover the milestones that shaped our story
+            Przewijaj czas i odkryj historię sukcesów od 2001 roku
           </p>
           
           {/* Scroll Indicator */}
@@ -154,7 +232,7 @@ const TimeTunnel = () => {
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            <span className="text-sm text-muted-foreground">Scroll to explore</span>
+            <span className="text-sm text-muted-foreground">Przewijaj aby odkryć</span>
             <div className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex justify-center pt-2">
               <motion.div 
                 className="w-1.5 h-3 bg-primary rounded-full"
@@ -183,7 +261,7 @@ const TimeTunnel = () => {
           transition={{ duration: 1 }}
         >
           <p className="font-display text-2xl text-muted-foreground">
-            The journey continues...
+            Historia trwa...
           </p>
         </motion.div>
       </div>
