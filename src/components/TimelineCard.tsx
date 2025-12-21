@@ -93,10 +93,34 @@ const TimelineCard = ({ event, index, isActive }: TimelineCardProps) => {
           {/* Achievements List */}
           <ul className="space-y-1.5 text-sm text-muted-foreground">
             {event.achievements.map((achievement, i) => (
-              <li key={i} className="flex items-start gap-2">
-                <span className="text-primary mt-1 text-xs">●</span>
+              <motion.li 
+                key={i} 
+                className="flex items-start gap-2"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ 
+                  duration: 0.4, 
+                  delay: i * 0.05,
+                  ease: "easeOut"
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+              >
+                <motion.span 
+                  className="text-primary mt-1 text-xs"
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  transition={{ 
+                    duration: 0.3, 
+                    delay: i * 0.05 + 0.2,
+                    type: "spring",
+                    stiffness: 400
+                  }}
+                  viewport={{ once: true }}
+                >
+                  ●
+                </motion.span>
                 <span>{achievement}</span>
-              </li>
+              </motion.li>
             ))}
           </ul>
 
