@@ -4,6 +4,8 @@ import TimelineCard from "./TimelineCard";
 import ProgressBar from "./ProgressBar";
 import ParticlesBackground from "./ParticlesBackground";
 import StatsHeader from "./StatsHeader";
+import useLenis from "@/hooks/useLenis";
+import useParallax from "@/hooks/useParallax";
 
 const timelineEvents = [
   {
@@ -291,6 +293,12 @@ const TimeTunnel = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // Initialize Lenis smooth scrolling
+  useLenis();
+  
+  // Initialize GSAP parallax effects
+  useParallax();
+
   // Calculate stats
   const stats = useMemo(() => {
     let mistrz = 0;
@@ -342,6 +350,67 @@ const TimeTunnel = () => {
       {/* Fixed Background */}
       <div className="fixed inset-0 bg-tunnel grid-overlay -z-10" />
       
+      {/* Parallax Background Layers */}
+      <div className="fixed inset-0 -z-8 pointer-events-none overflow-hidden">
+        {/* Slow parallax layer */}
+        <div 
+          className="parallax-slow absolute w-[600px] h-[600px] rounded-full blur-3xl opacity-20"
+          style={{ 
+            background: 'radial-gradient(circle, hsl(var(--primary) / 0.4) 0%, transparent 70%)',
+            top: '10%',
+            left: '10%',
+          }}
+        />
+        <div 
+          className="parallax-slow absolute w-[500px] h-[500px] rounded-full blur-3xl opacity-15"
+          style={{ 
+            background: 'radial-gradient(circle, hsl(var(--glow-secondary) / 0.3) 0%, transparent 70%)',
+            top: '40%',
+            right: '5%',
+          }}
+        />
+        
+        {/* Fast parallax layer */}
+        <div 
+          className="parallax-fast absolute w-[300px] h-[300px] rounded-full blur-2xl opacity-25"
+          style={{ 
+            background: 'radial-gradient(circle, hsl(var(--primary) / 0.5) 0%, transparent 70%)',
+            bottom: '20%',
+            left: '20%',
+          }}
+        />
+        <div 
+          className="parallax-fast absolute w-[400px] h-[400px] rounded-full blur-2xl opacity-20"
+          style={{ 
+            background: 'radial-gradient(circle, hsl(var(--primary) / 0.3) 0%, transparent 70%)',
+            top: '60%',
+            right: '15%',
+          }}
+        />
+        
+        {/* Floating decorative elements */}
+        <div 
+          className="float-parallax absolute w-4 h-4 rounded-full bg-primary/40"
+          style={{ top: '15%', left: '25%' }}
+        />
+        <div 
+          className="float-parallax absolute w-3 h-3 rounded-full bg-primary/30"
+          style={{ top: '35%', right: '30%' }}
+        />
+        <div 
+          className="float-parallax absolute w-5 h-5 rounded-full bg-glow-secondary/40"
+          style={{ top: '55%', left: '15%' }}
+        />
+        <div 
+          className="float-parallax absolute w-2 h-2 rounded-full bg-primary/50"
+          style={{ top: '75%', right: '20%' }}
+        />
+        <div 
+          className="float-parallax absolute w-6 h-6 rounded-full bg-primary/20"
+          style={{ top: '25%', right: '10%' }}
+        />
+      </div>
+      
       {/* Particles Effect */}
       <ParticlesBackground />
       
@@ -352,7 +421,7 @@ const TimeTunnel = () => {
       >
         <div className="absolute inset-0 bg-gradient-radial from-primary/5 via-transparent to-transparent" 
           style={{ 
-            background: 'radial-gradient(ellipse at center, hsl(var(--primary) / 0.08) 0%, transparent 60%)' 
+            background: 'radial-gradient(ellipse at center, hsl(var(--primary) / 0.12) 0%, transparent 60%)' 
           }} 
         />
       </motion.div>
@@ -373,14 +442,15 @@ const TimeTunnel = () => {
           {[...Array(5)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute border border-primary/10 rounded-full"
+              className="absolute border border-primary/15 rounded-full parallax-slow"
               style={{
                 width: `${(i + 1) * 30}%`,
                 height: `${(i + 1) * 30}%`,
                 transform: `translateZ(${i * -100}px)`,
+                boxShadow: `0 0 ${20 + i * 10}px hsl(var(--primary) / 0.1)`,
               }}
               animate={{
-                opacity: [0.1, 0.3, 0.1],
+                opacity: [0.15, 0.35, 0.15],
                 scale: [1, 1.02, 1],
               }}
               transition={{
@@ -438,12 +508,13 @@ const TimeTunnel = () => {
 
         {/* Timeline Cards */}
         {timelineEvents.map((event, index) => (
-          <TimelineCard
-            key={event.year}
-            event={event}
-            index={index}
-            isActive={index === activeIndex}
-          />
+          <div key={event.year} className="timeline-parallax">
+            <TimelineCard
+              event={event}
+              index={index}
+              isActive={index === activeIndex}
+            />
+          </div>
         ))}
 
         {/* Footer */}
