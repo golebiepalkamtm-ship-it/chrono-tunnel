@@ -1,7 +1,9 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import TimelineCard from "./TimelineCard";
 import ProgressBar from "./ProgressBar";
+import ParticlesBackground from "./ParticlesBackground";
+import StatsHeader from "./StatsHeader";
 
 const timelineEvents = [
   {
@@ -289,6 +291,23 @@ const TimeTunnel = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // Calculate stats
+  const stats = useMemo(() => {
+    let mistrz = 0;
+    let wicemistrz = 0;
+    let przodownik = 0;
+
+    timelineEvents.forEach((event) => {
+      event.achievements.forEach((achievement) => {
+        if (achievement.includes("Mistrz")) mistrz++;
+        if (achievement.includes("Wicemistrz")) wicemistrz++;
+        if (achievement.includes("Przodownik")) przodownik++;
+      });
+    });
+
+    return { mistrz, wicemistrz, przodownik };
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
@@ -322,6 +341,9 @@ const TimeTunnel = () => {
     <div ref={containerRef} className="relative min-h-[400vh]">
       {/* Fixed Background */}
       <div className="fixed inset-0 bg-tunnel grid-overlay -z-10" />
+      
+      {/* Particles Effect */}
+      <ParticlesBackground />
       
       {/* Radial Glow Effect */}
       <motion.div 
@@ -387,10 +409,16 @@ const TimeTunnel = () => {
           >
             HISTORIA OSIĄGNIĘĆ
           </motion.h1>
-          <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-8">
             Przewijaj czas i odkryj historię sukcesów od 2001 roku
           </p>
           
+          {/* Stats Header */}
+          <StatsHeader 
+            mistrz={stats.mistrz} 
+            wicemistrz={stats.wicemistrz} 
+            przodownik={stats.przodownik} 
+          />
           {/* Scroll Indicator */}
           <motion.div 
             className="mt-12 flex flex-col items-center gap-2"
