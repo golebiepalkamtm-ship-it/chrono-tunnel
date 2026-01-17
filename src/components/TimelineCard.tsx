@@ -54,14 +54,48 @@ const TimelineCard = ({ event, index, isActive }: TimelineCardProps) => {
 
         {/* Content Card */}
         <motion.div
-          className={`glass-card p-6 md:p-8 w-full md:w-[60%] lg:w-[50%] relative z-10
+          className={`glass-card p-6 md:p-8 w-full md:w-[60%] lg:w-[50%] relative z-10 overflow-hidden
             ${isEven ? 'md:ml-auto' : 'md:mr-auto'}`}
           whileHover={{ 
             scale: 1.02,
-            boxShadow: "0 0 40px hsl(var(--glow-primary) / 0.3)",
+            boxShadow: "0 0 60px hsl(var(--glow-primary) / 0.4)",
           }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
+          {/* Front lighting effect */}
+          <motion.div
+            className="absolute -top-20 left-1/2 -translate-x-1/2 w-[200%] h-40 pointer-events-none"
+            style={{
+              background: 'radial-gradient(ellipse at center, hsl(var(--primary) / 0.25) 0%, transparent 60%)',
+            }}
+            animate={{
+              opacity: [0.4, 0.7, 0.4],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          />
+          
+          {/* Side glow */}
+          <motion.div
+            className="absolute -left-10 top-1/2 -translate-y-1/2 w-20 h-[80%] pointer-events-none blur-xl"
+            style={{
+              background: 'linear-gradient(90deg, hsl(var(--primary) / 0.3) 0%, transparent 100%)',
+            }}
+            animate={{
+              opacity: [0.2, 0.5, 0.2],
+            }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute -right-10 top-1/2 -translate-y-1/2 w-20 h-[80%] pointer-events-none blur-xl"
+            style={{
+              background: 'linear-gradient(-90deg, hsl(var(--primary) / 0.3) 0%, transparent 100%)',
+            }}
+            animate={{
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+          />
           {/* Mobile Year Badge */}
           <div className="md:hidden mb-4">
             <span className="font-display text-5xl font-bold text-primary/30">
