@@ -1,3 +1,13 @@
+/**
+ * TimeTunnel - Main Timeline Component
+ * 
+ * Orchestrates the complete timeline experience with:
+ * - Lenis smooth scrolling
+ * - GSAP ScrollTrigger parallax
+ * - Framer Motion for declarative UI animations
+ * - CSS variable-driven dynamic effects
+ */
+
 import { useRef, useState, useEffect, useMemo } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import TimelineCard from "./TimelineCard";
@@ -418,11 +428,12 @@ const TimeTunnel = () => {
       {/* Fixed Background */}
       <div className="fixed inset-0 bg-tunnel grid-overlay -z-10" />
       
-      {/* Parallax Background Layers */}
+      {/* Parallax Background Layers - Enhanced with depth classes */}
       <div className="fixed inset-0 -z-8 pointer-events-none overflow-hidden">
-        {/* Slow parallax layer */}
+        {/* Deep layer - slowest parallax */}
         <div 
-          className="parallax-slow absolute w-[600px] h-[600px] rounded-full blur-3xl opacity-20"
+          className="parallax-slow parallax-layer-deep mouse-parallax absolute w-[600px] h-[600px] rounded-full blur-3xl opacity-20"
+          data-depth="0.2"
           style={{ 
             background: 'radial-gradient(circle, hsl(var(--primary) / 0.4) 0%, transparent 70%)',
             top: '10%',
@@ -430,7 +441,9 @@ const TimeTunnel = () => {
           }}
         />
         <div 
-          className="parallax-slow absolute w-[500px] h-[500px] rounded-full blur-3xl opacity-15"
+          className="parallax-slow parallax-layer-deep mouse-parallax absolute w-[500px] h-[500px] rounded-full blur-3xl opacity-15"
+          data-depth="0.25"
+          data-invert="true"
           style={{ 
             background: 'radial-gradient(circle, hsl(var(--glow-secondary) / 0.3) 0%, transparent 70%)',
             top: '40%',
@@ -438,9 +451,10 @@ const TimeTunnel = () => {
           }}
         />
         
-        {/* Fast parallax layer */}
+        {/* Mid layer - moderate parallax */}
         <div 
-          className="parallax-fast absolute w-[300px] h-[300px] rounded-full blur-2xl opacity-25"
+          className="parallax-fast parallax-layer-mid mouse-parallax absolute w-[300px] h-[300px] rounded-full blur-2xl opacity-25"
+          data-depth="0.4"
           style={{ 
             background: 'radial-gradient(circle, hsl(var(--primary) / 0.5) 0%, transparent 70%)',
             bottom: '20%',
@@ -448,7 +462,9 @@ const TimeTunnel = () => {
           }}
         />
         <div 
-          className="parallax-fast absolute w-[400px] h-[400px] rounded-full blur-2xl opacity-20"
+          className="parallax-fast parallax-layer-mid mouse-parallax absolute w-[400px] h-[400px] rounded-full blur-2xl opacity-20"
+          data-depth="0.35"
+          data-invert="true"
           style={{ 
             background: 'radial-gradient(circle, hsl(var(--primary) / 0.3) 0%, transparent 70%)',
             top: '60%',
@@ -456,25 +472,32 @@ const TimeTunnel = () => {
           }}
         />
         
-        {/* Floating decorative elements */}
+        {/* Floating decorative elements - fastest response */}
         <div 
-          className="float-parallax absolute w-4 h-4 rounded-full bg-primary/40"
+          className="float-parallax parallax-layer-front mouse-parallax absolute w-4 h-4 rounded-full bg-primary/40"
+          data-depth="0.6"
           style={{ top: '15%', left: '25%' }}
         />
         <div 
-          className="float-parallax absolute w-3 h-3 rounded-full bg-primary/30"
+          className="float-parallax parallax-layer-front mouse-parallax absolute w-3 h-3 rounded-full bg-primary/30"
+          data-depth="0.7"
+          data-invert="true"
           style={{ top: '35%', right: '30%' }}
         />
         <div 
-          className="float-parallax absolute w-5 h-5 rounded-full bg-glow-secondary/40"
+          className="float-parallax parallax-layer-front mouse-parallax absolute w-5 h-5 rounded-full bg-glow-secondary/40"
+          data-depth="0.5"
           style={{ top: '55%', left: '15%' }}
         />
         <div 
-          className="float-parallax absolute w-2 h-2 rounded-full bg-primary/50"
+          className="float-parallax parallax-layer-front mouse-parallax absolute w-2 h-2 rounded-full bg-primary/50"
+          data-depth="0.8"
+          data-invert="true"
           style={{ top: '75%', right: '20%' }}
         />
         <div 
-          className="float-parallax absolute w-6 h-6 rounded-full bg-primary/20"
+          className="float-parallax parallax-layer-mid mouse-parallax absolute w-6 h-6 rounded-full bg-primary/20"
+          data-depth="0.45"
           style={{ top: '25%', right: '10%' }}
         />
       </div>
@@ -500,31 +523,22 @@ const TimeTunnel = () => {
         activeIndex={activeIndex}
       />
 
-      {/* Tunnel Container */}
+      {/* Tunnel Container with Enhanced Rings */}
       <div className="sticky top-0 h-screen overflow-hidden tunnel-perspective">
         <motion.div 
           className="absolute inset-0 flex items-center justify-center"
           style={{ z: perspectiveZ }}
         >
-          {/* Tunnel Rings */}
+          {/* Tunnel Rings - Now with GSAP animation classes */}
           {[...Array(5)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute border border-primary/15 rounded-full parallax-slow"
+              className="tunnel-ring absolute border border-primary/15 rounded-full"
               style={{
                 width: `${(i + 1) * 30}%`,
                 height: `${(i + 1) * 30}%`,
                 transform: `translateZ(${i * -100}px)`,
                 boxShadow: `0 0 ${20 + i * 10}px hsl(var(--primary) / 0.1)`,
-              }}
-              animate={{
-                opacity: [0.15, 0.35, 0.15],
-                scale: [1, 1.02, 1],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                delay: i * 0.5,
               }}
             />
           ))}
@@ -533,42 +547,66 @@ const TimeTunnel = () => {
 
       {/* Timeline Content */}
       <div className="relative z-10 pt-[50vh] pb-[50vh] px-4 md:px-16 lg:px-24 max-w-7xl mx-auto">
-        {/* Header */}
+        {/* Header - Hero Section with GSAP classes */}
         <motion.div 
-          className="text-center mb-32"
+          className="hero-section text-center mb-32"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
+          transition={{ 
+            duration: 1.2, 
+            delay: 0.2,
+            ease: [0.16, 1, 0.3, 1] // expo.out
+          }}
         >
           <motion.h1 
-            className="font-display text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 glow-text"
-            animate={{ opacity: [0.8, 1, 0.8] }}
-            transition={{ duration: 3, repeat: Infinity }}
+            className="hero-title font-display text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 glow-text"
+            initial={{ opacity: 0, y: 80, rotateX: 15, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
+            transition={{ 
+              duration: 1.4, 
+              delay: 0.3,
+              ease: [0.16, 1, 0.3, 1] // expo.out - the signature Cassie Evans feel
+            }}
           >
             HISTORIA OSIĄGNIĘĆ
           </motion.h1>
-          <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-8">
+          <motion.p 
+            className="hero-subtitle text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-8"
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ 
+              duration: 0.8, 
+              delay: 0.6,
+              ease: [0.33, 1, 0.68, 1] // power3.out
+            }}
+          >
             Przewijaj czas i odkryj historię sukcesów od 2001 roku
-          </p>
+          </motion.p>
           
-          {/* Stats Header */}
+          {/* Stats Header with stagger animation */}
           <StatsHeader 
             mistrz={stats.mistrz} 
             wicemistrz={stats.wicemistrz} 
             przodownik={stats.przodownik} 
           />
+          
           {/* Scroll Indicator */}
           <motion.div 
-            className="mt-12 flex flex-col items-center gap-2"
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
+            className="scroll-indicator mt-12 flex flex-col items-center gap-2"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.2 }}
           >
             <span className="text-sm text-muted-foreground">Przewijaj aby odkryć</span>
             <div className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex justify-center pt-2">
               <motion.div 
                 className="w-1.5 h-3 bg-primary rounded-full"
                 animate={{ y: [0, 12, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
+                transition={{ 
+                  duration: 1.5, 
+                  repeat: Infinity,
+                  ease: "easeInOut" // sine.inOut for organic breathing
+                }}
               />
             </div>
           </motion.div>
@@ -587,30 +625,46 @@ const TimeTunnel = () => {
 
         {/* Footer */}
         <motion.div 
-          className="text-center pt-20"
+          className="footer-section text-center pt-20"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 1 }}
+          viewport={{ once: true }}
         >
-          <p className="font-display text-2xl text-muted-foreground">
+          <motion.p 
+            className="footer-text font-display text-2xl text-muted-foreground"
+            initial={{ opacity: 0, y: 40, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ 
+              duration: 1,
+              ease: [0.16, 1, 0.3, 1] // expo.out
+            }}
+            viewport={{ once: true }}
+          >
             Historia trwa...
-          </p>
+          </motion.p>
         </motion.div>
       </div>
 
       {/* Mobile Progress Indicator */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 md:hidden z-50">
-        <div className="glass-card px-4 py-2 flex items-center gap-3">
+        <motion.div 
+          className="glass-card px-4 py-2 flex items-center gap-3"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1.5 }}
+        >
           <span className="font-display text-lg text-primary glow-text">
             {years[activeIndex]}
           </span>
           <div className="w-24 h-1 rounded-full bg-muted overflow-hidden">
             <motion.div 
-              className="h-full progress-glow"
+              className="h-full progress-glow progress-fill"
               style={{ width: `${((activeIndex + 1) / years.length) * 100}%` }}
+              transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
             />
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
