@@ -100,7 +100,18 @@
 }
 
 @layer utilities {
-  /* Glassmorphism card */
+  /* ==========================================
+   * GSAP Animation Performance Hints
+   * ==========================================
+   * will-change applied via JS, but base transforms here
+   */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Glassmorphism card with dynamic glow */
   .glass-card {
     @apply relative overflow-hidden rounded-2xl;
     background: linear-gradient(
@@ -113,7 +124,12 @@
     border: 1px solid hsl(var(--glass-border) / 0.2);
     box-shadow: 
       0 8px 32px 0 hsl(var(--tunnel-depth) / 0.4),
-      inset 0 1px 0 0 hsl(var(--foreground) / 0.05);
+      inset 0 1px 0 0 hsl(var(--foreground) / 0.05),
+      0 0 calc(30px * var(--glow-intensity, 0)) hsl(var(--glow-primary) / calc(0.3 * var(--glow-intensity, 0)));
+    
+    /* CSS variable for GSAP animation */
+    --glow-intensity: 0;
+    transition: box-shadow 0.3s ease;
   }
 
   .glass-card::before {
@@ -126,12 +142,12 @@
     background: linear-gradient(
       90deg,
       transparent,
-      hsl(var(--glow-primary) / 0.5),
+      hsl(var(--glow-primary) / calc(0.5 + 0.3 * var(--glow-intensity, 0))),
       transparent
     );
   }
 
-  /* Year ghost text */
+  /* Year ghost text with parallax-ready styling */
   .year-ghost {
     font-family: 'Orbitron', monospace;
     background: linear-gradient(
@@ -142,20 +158,29 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    will-change: transform, opacity;
   }
 
-  /* Tunnel perspective */
+  /* Tunnel perspective with enhanced 3D */
   .tunnel-perspective {
     perspective: 1200px;
     perspective-origin: center center;
+    transform-style: preserve-3d;
   }
 
   .tunnel-card {
     transform-style: preserve-3d;
     backface-visibility: hidden;
+    will-change: transform, opacity, filter;
   }
 
-  /* Glow effects */
+  /* Tunnel rings for background animation */
+  .tunnel-ring {
+    will-change: transform, opacity;
+    transform-origin: center center;
+  }
+
+  /* Glow effects with CSS variable control */
   .glow-primary {
     box-shadow: 
       0 0 20px hsl(var(--glow-primary) / 0.3),
@@ -168,7 +193,7 @@
       0 0 30px hsl(var(--glow-primary) / 0.3);
   }
 
-  /* Progress bar */
+  /* Progress bar with dynamic glow */
   .progress-glow {
     background: linear-gradient(
       180deg,
@@ -178,6 +203,11 @@
     box-shadow: 
       0 0 15px hsl(var(--glow-primary) / 0.6),
       0 0 30px hsl(var(--glow-primary) / 0.3);
+  }
+
+  .progress-glow-element {
+    --glow-opacity: 0.3;
+    box-shadow: 0 0 calc(20px * var(--glow-opacity)) hsl(var(--glow-primary) / var(--glow-opacity));
   }
 
   /* Background gradient */
@@ -198,7 +228,80 @@
     background-size: 80px 80px;
   }
 
-  /* Lenis smooth scroll */
+  /* ==========================================
+   * Parallax Layer Classes
+   * ==========================================
+   * Used by GSAP for scroll-driven depth effects
+   */
+  .parallax-layer-deep {
+    will-change: transform;
+  }
+
+  .parallax-layer-mid {
+    will-change: transform;
+  }
+
+  .parallax-layer-front {
+    will-change: transform;
+  }
+
+  .parallax-float {
+    will-change: transform, opacity;
+  }
+
+  .parallax-orb {
+    will-change: transform, opacity;
+    border-radius: 50%;
+    filter: blur(60px);
+  }
+
+  /* Mouse parallax depth markers */
+  .mouse-parallax {
+    will-change: transform;
+  }
+
+  /* ==========================================
+   * Animation Classes for Timeline Cards
+   * ==========================================
+   */
+  .achievement-item {
+    will-change: transform, opacity;
+  }
+
+  /* Hero section animations */
+  .hero-section {
+    will-change: transform, opacity;
+  }
+
+  .hero-title {
+    will-change: transform, opacity, filter;
+  }
+
+  .hero-subtitle {
+    will-change: transform, opacity;
+  }
+
+  .stat-card {
+    will-change: transform, opacity;
+    transform-style: preserve-3d;
+  }
+
+  .scroll-indicator {
+    will-change: transform, opacity;
+  }
+
+  .footer-section {
+    will-change: opacity;
+  }
+
+  .footer-text {
+    will-change: transform, opacity;
+  }
+
+  /* ==========================================
+   * Lenis Smooth Scroll
+   * ==========================================
+   */
   html.lenis {
     height: auto;
   }
@@ -215,7 +318,10 @@
     overflow: hidden;
   }
 
-  /* Scrollbar styling */
+  /* ==========================================
+   * Custom Scrollbar
+   * ==========================================
+   */
   ::-webkit-scrollbar {
     width: 6px;
   }
@@ -231,5 +337,32 @@
 
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--primary) / 0.7);
+  }
+
+  /* ==========================================
+   * Particle Animation Styles
+   * ==========================================
+   */
+  .particle {
+    will-change: transform, opacity;
+    pointer-events: none;
+  }
+
+  /* ==========================================
+   * Card Front Lighting Effect
+   * ==========================================
+   */
+  .card-front-light {
+    background: radial-gradient(
+      ellipse at center top,
+      hsl(var(--primary) / calc(0.15 + 0.15 * var(--glow-intensity, 0))) 0%,
+      transparent 60%
+    );
+    will-change: opacity;
+  }
+
+  .card-side-glow {
+    will-change: opacity;
+    filter: blur(20px);
   }
 }

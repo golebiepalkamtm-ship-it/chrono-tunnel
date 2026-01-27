@@ -1,4 +1,16 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+/**
+ * TimelineCard Component - Premium Animated Card
+ * 
+ * Uses Framer Motion for declarative animations with professional easing.
+ * GSAP handles the heavy lifting via useParallax hook.
+ * 
+ * Animation Philosophy:
+ * - Cards enter with 3D rotation and blur for depth
+ * - Dynamic glow controlled via CSS variables
+ * - Staggered achievement reveals for engagement
+ */
+
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
 
 interface TimelineEvent {
@@ -22,27 +34,39 @@ const TimelineCard = ({ event, index, isActive }: TimelineCardProps) => {
     offset: ["start end", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 0.5, 1], [100, 0, -100]);
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.8, 1, 1, 0.8]);
-  const rotateX = useTransform(scrollYProgress, [0, 0.5, 1], [15, 0, -15]);
-  const z = useTransform(scrollYProgress, [0, 0.5, 1], [-100, 0, -100]);
+  // Spring physics for organic movement
+  // Low stiffness + high damping = smooth, weighted feel
+  const springConfig = { stiffness: 80, damping: 25, restDelta: 0.001 };
+  
+  const y = useSpring(
+    useTransform(scrollYProgress, [0, 0.5, 1], [80, 0, -80]),
+    springConfig
+  );
+  const scale = useSpring(
+    useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.85, 1, 1, 0.9]),
+    springConfig
+  );
+  const rotateX = useSpring(
+    useTransform(scrollYProgress, [0, 0.5, 1], [12, 0, -12]),
+    springConfig
+  );
 
   const isEven = index % 2 === 0;
 
   return (
     <motion.div
       ref={cardRef}
-      style={{ y, opacity, scale, rotateX, z }}
+      style={{ y, scale, rotateX }}
       className="tunnel-card relative mb-24 md:mb-32"
     >
       <div className={`flex items-center gap-8 ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-        {/* Year Ghost */}
+        {/* Year Ghost - Enhanced with mouse-parallax */}
         <motion.div 
-          className="hidden md:block absolute inset-0 -z-10 overflow-hidden pointer-events-none"
+          className="hidden md:block absolute inset-0 -z-10 overflow-hidden pointer-events-none mouse-parallax"
+          data-depth="0.3"
           initial={{ opacity: 0 }}
           animate={{ opacity: isActive ? 1 : 0.3 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} // expo.out equivalent
         >
           <span 
             className={`year-ghost absolute text-[12rem] lg:text-[16rem] font-display font-black leading-none
@@ -52,50 +76,58 @@ const TimelineCard = ({ event, index, isActive }: TimelineCardProps) => {
           </span>
         </motion.div>
 
-        {/* Content Card */}
+        {/* Content Card with Dynamic Glow */}
         <motion.div
           className={`glass-card p-6 md:p-8 w-full md:w-[60%] lg:w-[50%] relative z-10 overflow-hidden
             ${isEven ? 'md:ml-auto' : 'md:mr-auto'}`}
           whileHover={{ 
             scale: 1.02,
-            boxShadow: "0 0 60px hsl(var(--glow-primary) / 0.4)",
+            // Glow intensity increases on hover
+            "--glow-intensity": 1,
+          } as any}
+          transition={{ 
+            type: "spring", 
+            stiffness: 400, 
+            damping: 25,
+            // back.out(1.7) equivalent - slight overshoot
           }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
-          {/* Front lighting effect */}
+          {/* Front lighting effect - Animated with scroll */}
           <motion.div
-            className="absolute -top-20 left-1/2 -translate-x-1/2 w-[200%] h-40 pointer-events-none"
-            style={{
-              background: 'radial-gradient(ellipse at center, hsl(var(--primary) / 0.25) 0%, transparent 60%)',
-            }}
+            className="card-front-light absolute -top-20 left-1/2 -translate-x-1/2 w-[200%] h-40 pointer-events-none"
             animate={{
-              opacity: [0.4, 0.7, 0.4],
-              scale: [1, 1.1, 1],
+              opacity: isActive ? [0.5, 0.8, 0.5] : 0.3,
+              scale: isActive ? [1, 1.1, 1] : 1,
             }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ 
+              duration: 3, 
+              repeat: Infinity, 
+              ease: "easeInOut" // sine.inOut for breathing
+            }}
           />
           
-          {/* Side glow */}
+          {/* Side glow effects - Animated pulses */}
           <motion.div
-            className="absolute -left-10 top-1/2 -translate-y-1/2 w-20 h-[80%] pointer-events-none blur-xl"
+            className="card-side-glow absolute -left-10 top-1/2 -translate-y-1/2 w-20 h-[80%] pointer-events-none"
             style={{
               background: 'linear-gradient(90deg, hsl(var(--primary) / 0.3) 0%, transparent 100%)',
             }}
             animate={{
-              opacity: [0.2, 0.5, 0.2],
+              opacity: isActive ? [0.3, 0.6, 0.3] : 0.15,
             }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
           />
           <motion.div
-            className="absolute -right-10 top-1/2 -translate-y-1/2 w-20 h-[80%] pointer-events-none blur-xl"
+            className="card-side-glow absolute -right-10 top-1/2 -translate-y-1/2 w-20 h-[80%] pointer-events-none"
             style={{
               background: 'linear-gradient(-90deg, hsl(var(--primary) / 0.3) 0%, transparent 100%)',
             }}
             animate={{
-              opacity: [0.3, 0.6, 0.3],
+              opacity: isActive ? [0.4, 0.7, 0.4] : 0.2,
             }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
           />
+
           {/* Mobile Year Badge */}
           <div className="md:hidden mb-4">
             <span className="font-display text-5xl font-bold text-primary/30">
@@ -113,41 +145,62 @@ const TimelineCard = ({ event, index, isActive }: TimelineCardProps) => {
               {event.year}
             </motion.span>
             {event.highlight && (
-              <span className="px-3 py-1 text-xs font-medium rounded-full bg-primary/20 text-primary border border-primary/30">
+              <motion.span 
+                className="px-3 py-1 text-xs font-medium rounded-full bg-primary/20 text-primary border border-primary/30"
+                initial={{ scale: 0.8, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                transition={{ 
+                  type: "spring", 
+                  stiffness: 500, 
+                  damping: 25,
+                  delay: 0.2 
+                }}
+                viewport={{ once: true }}
+              >
                 {event.highlight}
-              </span>
+              </motion.span>
             )}
           </div>
 
-          {/* Title */}
-          <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-3 leading-tight">
+          {/* Title with premium animation */}
+          <motion.h3 
+            className="text-xl md:text-2xl font-semibold text-foreground mb-3 leading-tight"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ 
+              duration: 0.6, 
+              ease: [0.16, 1, 0.3, 1] // expo.out
+            }}
+            viewport={{ once: true, margin: "-50px" }}
+          >
             {event.title}
-          </h3>
+          </motion.h3>
 
-          {/* Achievements List */}
+          {/* Achievements List with Staggered Reveal */}
           <ul className="space-y-1.5 text-sm text-muted-foreground">
             {event.achievements.map((achievement, i) => (
               <motion.li 
                 key={i} 
-                className="flex items-start gap-2"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                className="achievement-item flex items-start gap-2"
+                initial={{ opacity: 0, x: -30, scale: 0.95 }}
+                whileInView={{ opacity: 1, x: 0, scale: 1 }}
                 transition={{ 
-                  duration: 0.4, 
-                  delay: i * 0.05,
-                  ease: "easeOut"
+                  duration: 0.5, 
+                  delay: i * 0.05, // Fast stagger for energy
+                  ease: [0.33, 1, 0.68, 1] // power3.out
                 }}
-                viewport={{ once: true, margin: "-50px" }}
+                viewport={{ once: true, margin: "-30px" }}
               >
                 <motion.span 
                   className="text-primary mt-1 text-xs"
-                  initial={{ scale: 0 }}
-                  whileInView={{ scale: 1 }}
+                  initial={{ scale: 0, rotate: -180 }}
+                  whileInView={{ scale: 1, rotate: 0 }}
                   transition={{ 
-                    duration: 0.3, 
-                    delay: i * 0.05 + 0.2,
+                    duration: 0.4, 
+                    delay: i * 0.05 + 0.15,
                     type: "spring",
-                    stiffness: 400
+                    stiffness: 500,
+                    damping: 20
                   }}
                   viewport={{ once: true }}
                 >
@@ -158,12 +211,17 @@ const TimelineCard = ({ event, index, isActive }: TimelineCardProps) => {
             ))}
           </ul>
 
-          {/* Decorative Line */}
+          {/* Decorative Bottom Line - Animated draw */}
           <motion.div 
             className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary via-glow-secondary to-transparent"
-            initial={{ width: "0%" }}
-            whileInView={{ width: "100%" }}
-            transition={{ duration: 1, delay: 0.2 }}
+            initial={{ width: "0%", opacity: 0 }}
+            whileInView={{ width: "100%", opacity: 1 }}
+            transition={{ 
+              duration: 0.8, 
+              delay: 0.3,
+              ease: [0.16, 1, 0.3, 1] // expo.out
+            }}
+            viewport={{ once: true }}
           />
         </motion.div>
 
@@ -173,9 +231,14 @@ const TimelineCard = ({ event, index, isActive }: TimelineCardProps) => {
         >
           <motion.div 
             className="h-full progress-glow rounded-full"
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            initial={{ scaleX: 0, opacity: 0 }}
+            whileInView={{ scaleX: 1, opacity: 1 }}
+            transition={{ 
+              duration: 0.6, 
+              delay: 0.4,
+              ease: [0.16, 1, 0.3, 1]
+            }}
+            viewport={{ once: true }}
             style={{ transformOrigin: isEven ? 'right' : 'left' }}
           />
         </div>
