@@ -2,89 +2,106 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap');
 
 @layer base {
   :root {
-    /* Lighter deep space theme */
-    --background: 222 35% 12%;
-    --foreground: 210 40% 96%;
+    /* ==========================================
+     * LUXURY DEEP SPACE PALETTE
+     * Inspired by Cartier midnight blue + gold leaf
+     * ========================================== */
+    --background: 225 30% 6%;
+    --foreground: 45 20% 95%;
 
-    --card: 222 35% 16%;
-    --card-foreground: 210 40% 98%;
+    --card: 225 25% 10%;
+    --card-foreground: 45 15% 95%;
 
-    --popover: 222 35% 16%;
-    --popover-foreground: 210 40% 96%;
+    --popover: 225 25% 10%;
+    --popover-foreground: 45 15% 95%;
 
-    /* Golden accent #D4A017 */
-    --primary: 43 81% 46%;
-    --primary-foreground: 222 47% 5%;
+    /* Golden accent — warm 24K gold leaf */
+    --primary: 43 85% 52%;
+    --primary-foreground: 225 40% 4%;
 
-    --secondary: 222 35% 20%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 225 25% 14%;
+    --secondary-foreground: 45 15% 95%;
 
-    --muted: 222 35% 18%;
-    --muted-foreground: 215 25% 65%;
+    --muted: 225 20% 12%;
+    --muted-foreground: 220 15% 55%;
 
-    --accent: 43 81% 36%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 43 70% 40%;
+    --accent-foreground: 45 15% 95%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 45 15% 95%;
 
-    --border: 222 30% 25%;
-    --input: 222 30% 25%;
-    --ring: 43 81% 46%;
+    --border: 225 20% 16%;
+    --input: 225 20% 16%;
+    --ring: 43 85% 52%;
 
     --radius: 1rem;
 
-    /* Custom tokens for timeline - golden theme */
-    --glass-bg: 222 35% 18%;
-    --glass-border: 43 81% 46%;
-    --year-ghost: 43 81% 46%;
-    --tunnel-depth: 222 35% 8%;
-    --glow-primary: 43 81% 46%;
-    --glow-secondary: 35 90% 55%;
-    --parallax-bg: 222 30% 15%;
+    /* ==========================================
+     * LUXURY DESIGN TOKENS
+     * ========================================== */
+    --glass-bg: 225 25% 10%;
+    --glass-border: 43 85% 52%;
+    --year-ghost: 43 85% 52%;
+    --tunnel-depth: 225 30% 3%;
+    --glow-primary: 43 85% 52%;
+    --glow-secondary: 35 90% 60%;
+    --glow-tertiary: 200 80% 60%;
+    --parallax-bg: 225 25% 8%;
 
-    --sidebar-background: 222 35% 10%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 43 81% 46%;
-    --sidebar-primary-foreground: 222 35% 5%;
-    --sidebar-accent: 222 35% 20%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 222 30% 25%;
-    --sidebar-ring: 43 81% 46%;
+    /* Aurora colors */
+    --aurora-1: 43 85% 52%;
+    --aurora-2: 35 90% 60%;
+    --aurora-3: 200 60% 50%;
+    --aurora-4: 280 60% 45%;
+
+    /* Medal colors */
+    --medal-gold: 43 90% 55%;
+    --medal-silver: 220 10% 75%;
+    --medal-bronze: 25 70% 45%;
+
+    --sidebar-background: 225 30% 5%;
+    --sidebar-foreground: 45 15% 95%;
+    --sidebar-primary: 43 85% 52%;
+    --sidebar-primary-foreground: 225 40% 4%;
+    --sidebar-accent: 225 25% 14%;
+    --sidebar-accent-foreground: 45 15% 95%;
+    --sidebar-border: 225 20% 16%;
+    --sidebar-ring: 43 85% 52%;
   }
 
   .dark {
-    --background: 222 35% 12%;
-    --foreground: 210 40% 98%;
-    --card: 222 35% 16%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 35% 16%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 43 81% 46%;
-    --primary-foreground: 222 35% 5%;
-    --secondary: 222 35% 20%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 222 35% 18%;
-    --muted-foreground: 215 25% 65%;
-    --accent: 43 81% 36%;
-    --accent-foreground: 210 40% 98%;
+    --background: 225 30% 6%;
+    --foreground: 45 20% 95%;
+    --card: 225 25% 10%;
+    --card-foreground: 45 15% 95%;
+    --popover: 225 25% 10%;
+    --popover-foreground: 45 15% 95%;
+    --primary: 43 85% 52%;
+    --primary-foreground: 225 40% 4%;
+    --secondary: 225 25% 14%;
+    --secondary-foreground: 45 15% 95%;
+    --muted: 225 20% 12%;
+    --muted-foreground: 220 15% 55%;
+    --accent: 43 70% 40%;
+    --accent-foreground: 45 15% 95%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 222 30% 25%;
-    --input: 222 30% 25%;
-    --ring: 43 81% 46%;
-    --sidebar-background: 222 35% 10%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 43 81% 46%;
-    --sidebar-primary-foreground: 222 35% 5%;
-    --sidebar-accent: 222 35% 20%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 222 30% 25%;
-    --sidebar-ring: 43 81% 46%;
+    --destructive-foreground: 45 15% 95%;
+    --border: 225 20% 16%;
+    --input: 225 20% 16%;
+    --ring: 43 85% 52%;
+    --sidebar-background: 225 30% 5%;
+    --sidebar-foreground: 45 15% 95%;
+    --sidebar-primary: 43 85% 52%;
+    --sidebar-primary-foreground: 225 40% 4%;
+    --sidebar-accent: 225 25% 14%;
+    --sidebar-accent-foreground: 45 15% 95%;
+    --sidebar-border: 225 20% 16%;
+    --sidebar-ring: 43 85% 52%;
   }
 }
 
@@ -94,44 +111,57 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground antialiased;
     font-family: 'Space Grotesk', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Selection styling — luxury gold */
+  ::selection {
+    background: hsl(var(--primary) / 0.3);
+    color: hsl(var(--foreground));
   }
 }
 
 @layer utilities {
   /* ==========================================
-   * GSAP Animation Performance Hints
-   * ==========================================
-   * will-change applied via JS, but base transforms here
-   */
+   * GPU ACCELERATION
+   * ========================================== */
   .gpu-accelerated {
     transform: translateZ(0);
     backface-visibility: hidden;
     perspective: 1000px;
   }
 
-  /* Glassmorphism card with dynamic glow */
+  /* ==========================================
+   * LUXURY GLASSMORPHISM — Multi-layer depth
+   * Why: Cartier-level glass with prismatic edge lighting
+   * ========================================== */
   .glass-card {
     @apply relative overflow-hidden rounded-2xl;
     background: linear-gradient(
-      135deg,
-      hsl(var(--glass-bg) / 0.6) 0%,
-      hsl(var(--glass-bg) / 0.3) 100%
+      145deg,
+      hsl(var(--glass-bg) / 0.7) 0%,
+      hsl(var(--glass-bg) / 0.3) 50%,
+      hsl(var(--glass-bg) / 0.5) 100%
     );
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid hsl(var(--glass-border) / 0.2);
+    backdrop-filter: blur(40px) saturate(1.5);
+    -webkit-backdrop-filter: blur(40px) saturate(1.5);
+    border: 1px solid hsl(var(--glass-border) / 0.12);
     box-shadow: 
-      0 8px 32px 0 hsl(var(--tunnel-depth) / 0.4),
-      inset 0 1px 0 0 hsl(var(--foreground) / 0.05),
-      0 0 calc(30px * var(--glow-intensity, 0)) hsl(var(--glow-primary) / calc(0.3 * var(--glow-intensity, 0)));
-    
-    /* CSS variable for GSAP animation */
+      0 0 0 1px hsl(var(--foreground) / 0.03),
+      0 20px 60px -15px hsl(var(--tunnel-depth) / 0.6),
+      0 0 calc(40px * var(--glow-intensity, 0)) hsl(var(--glow-primary) / calc(0.4 * var(--glow-intensity, 0))),
+      inset 0 1px 0 0 hsl(var(--foreground) / 0.06);
     --glow-intensity: 0;
-    transition: box-shadow 0.3s ease;
+    transition: box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.6s ease;
   }
 
+  .glass-card:hover {
+    border-color: hsl(var(--glass-border) / 0.25);
+  }
+
+  /* Top prismatic edge — gold gradient light leak */
   .glass-card::before {
     content: '';
     position: absolute;
@@ -141,29 +171,80 @@
     height: 1px;
     background: linear-gradient(
       90deg,
+      transparent 5%,
+      hsl(var(--glow-primary) / 0.4) 20%,
+      hsl(var(--glow-secondary) / 0.6) 50%,
+      hsl(var(--glow-primary) / 0.4) 80%,
+      transparent 95%
+    );
+    opacity: calc(0.5 + 0.5 * var(--glow-intensity, 0));
+  }
+
+  /* Bottom prismatic edge */
+  .glass-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
       transparent,
-      hsl(var(--glow-primary) / calc(0.5 + 0.3 * var(--glow-intensity, 0))),
+      hsl(var(--glow-primary) / 0.15),
       transparent
     );
   }
 
-  /* Year ghost text with parallax-ready styling */
+  /* ==========================================
+   * HOLOGRAPHIC CARD EFFECT
+   * Rainbow prismatic shimmer on hover
+   * ========================================== */
+  .holographic-shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      hsl(var(--glow-primary) / 0.08) 45%,
+      hsl(var(--glow-tertiary) / 0.05) 50%,
+      hsl(var(--aurora-4) / 0.04) 55%,
+      transparent 60%
+    );
+    background-size: 200% 100%;
+    pointer-events: none;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .glass-card:hover .holographic-shimmer {
+    opacity: 1;
+  }
+
+  /* ==========================================
+   * YEAR GHOST — Luxury typography
+   * ========================================== */
   .year-ghost {
     font-family: 'Orbitron', monospace;
     background: linear-gradient(
       180deg,
-      hsl(var(--year-ghost) / 0.15) 0%,
-      hsl(var(--year-ghost) / 0.02) 100%
+      hsl(var(--year-ghost) / 0.12) 0%,
+      hsl(var(--year-ghost) / 0.03) 60%,
+      transparent 100%
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     will-change: transform, opacity;
+    filter: blur(0.5px);
   }
 
-  /* Tunnel perspective with enhanced 3D */
+  /* ==========================================
+   * TUNNEL PERSPECTIVE — Enhanced 3D
+   * ========================================== */
   .tunnel-perspective {
-    perspective: 1200px;
+    perspective: 1500px;
     perspective-origin: center center;
     transform-style: preserve-3d;
   }
@@ -174,26 +255,30 @@
     will-change: transform, opacity, filter;
   }
 
-  /* Tunnel rings for background animation */
   .tunnel-ring {
     will-change: transform, opacity;
     transform-origin: center center;
   }
 
-  /* Glow effects with CSS variable control */
+  /* ==========================================
+   * GLOW EFFECTS — Refined radiance
+   * ========================================== */
   .glow-primary {
     box-shadow: 
       0 0 20px hsl(var(--glow-primary) / 0.3),
-      0 0 40px hsl(var(--glow-primary) / 0.1);
+      0 0 60px hsl(var(--glow-primary) / 0.1);
   }
 
   .glow-text {
     text-shadow: 
-      0 0 10px hsl(var(--glow-primary) / 0.5),
-      0 0 30px hsl(var(--glow-primary) / 0.3);
+      0 0 20px hsl(var(--glow-primary) / 0.4),
+      0 0 60px hsl(var(--glow-primary) / 0.15),
+      0 0 100px hsl(var(--glow-primary) / 0.05);
   }
 
-  /* Progress bar with dynamic glow */
+  /* ==========================================
+   * PROGRESS BAR — Luxury gradient
+   * ========================================== */
   .progress-glow {
     background: linear-gradient(
       180deg,
@@ -201,8 +286,8 @@
       hsl(var(--glow-secondary)) 100%
     );
     box-shadow: 
-      0 0 15px hsl(var(--glow-primary) / 0.6),
-      0 0 30px hsl(var(--glow-primary) / 0.3);
+      0 0 20px hsl(var(--glow-primary) / 0.5),
+      0 0 40px hsl(var(--glow-primary) / 0.2);
   }
 
   .progress-glow-element {
@@ -210,9 +295,21 @@
     box-shadow: 0 0 calc(20px * var(--glow-opacity)) hsl(var(--glow-primary) / var(--glow-opacity));
   }
 
-  /* Background gradient */
+  /* ==========================================
+   * AURORA BACKGROUND — Ethereal lighting
+   * ========================================== */
   .bg-tunnel {
     background: 
+      radial-gradient(
+        ellipse 80% 60% at 50% 0%,
+        hsl(var(--aurora-1) / 0.04) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse 60% 40% at 80% 20%,
+        hsl(var(--aurora-3) / 0.03) 0%,
+        transparent 50%
+      ),
       radial-gradient(
         ellipse at center,
         hsl(var(--background)) 0%,
@@ -220,64 +317,71 @@
       );
   }
 
+  /* Subtle noise texture overlay */
+  .noise-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.015;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    mix-blend-mode: overlay;
+  }
+
   /* Grid pattern overlay */
   .grid-overlay {
     background-image: 
-      linear-gradient(hsl(var(--border) / 0.08) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(var(--border) / 0.08) 1px, transparent 1px);
-    background-size: 80px 80px;
+      linear-gradient(hsl(var(--primary) / 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--primary) / 0.02) 1px, transparent 1px);
+    background-size: 100px 100px;
   }
 
   /* ==========================================
-   * Parallax Layer Classes
-   * ==========================================
-   * Used by GSAP for scroll-driven depth effects
-   */
-  .parallax-layer-deep {
-    will-change: transform;
+   * MEDAL BADGES — Gold/Silver/Bronze
+   * ========================================== */
+  .medal-gold {
+    background: linear-gradient(135deg, hsl(var(--medal-gold)) 0%, hsl(35 80% 45%) 100%);
+    box-shadow: 0 0 15px hsl(var(--medal-gold) / 0.4);
   }
 
-  .parallax-layer-mid {
-    will-change: transform;
+  .medal-silver {
+    background: linear-gradient(135deg, hsl(var(--medal-silver)) 0%, hsl(220 5% 60%) 100%);
+    box-shadow: 0 0 15px hsl(var(--medal-silver) / 0.3);
   }
 
-  .parallax-layer-front {
-    will-change: transform;
+  .medal-bronze {
+    background: linear-gradient(135deg, hsl(var(--medal-bronze)) 0%, hsl(20 60% 35%) 100%);
+    box-shadow: 0 0 15px hsl(var(--medal-bronze) / 0.3);
   }
 
-  .parallax-float {
-    will-change: transform, opacity;
+  /* ==========================================
+   * PARALLAX LAYERS
+   * ========================================== */
+  .parallax-layer-deep,
+  .parallax-layer-mid,
+  .parallax-layer-front,
+  .parallax-float,
+  .mouse-parallax {
+    will-change: transform;
   }
 
   .parallax-orb {
     will-change: transform, opacity;
     border-radius: 50%;
-    filter: blur(60px);
-  }
-
-  /* Mouse parallax depth markers */
-  .mouse-parallax {
-    will-change: transform;
+    filter: blur(80px);
   }
 
   /* ==========================================
-   * Animation Classes for Timeline Cards
-   * ==========================================
-   */
-  .achievement-item {
-    will-change: transform, opacity;
-  }
-
-  /* Hero section animations */
-  .hero-section {
-    will-change: transform, opacity;
-  }
-
-  .hero-title {
-    will-change: transform, opacity, filter;
-  }
-
-  .hero-subtitle {
+   * ANIMATION HINTS
+   * ========================================== */
+  .achievement-item,
+  .hero-section,
+  .hero-title,
+  .hero-subtitle,
+  .scroll-indicator,
+  .footer-section,
+  .footer-text {
     will-change: transform, opacity;
   }
 
@@ -286,22 +390,49 @@
     transform-style: preserve-3d;
   }
 
-  .scroll-indicator {
-    will-change: transform, opacity;
-  }
-
-  .footer-section {
-    will-change: opacity;
-  }
-
-  .footer-text {
+  /* ==========================================
+   * SPLIT TEXT — For character-by-character reveals
+   * ========================================== */
+  .split-char {
+    display: inline-block;
     will-change: transform, opacity;
   }
 
   /* ==========================================
-   * Lenis Smooth Scroll
-   * ==========================================
-   */
+   * LUXURY DIVIDER — Gold gradient line
+   * ========================================== */
+  .luxury-divider {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--primary) / 0.3) 20%,
+      hsl(var(--primary) / 0.6) 50%,
+      hsl(var(--primary) / 0.3) 80%,
+      transparent
+    );
+  }
+
+  /* ==========================================
+   * CARD LIGHTING EFFECTS
+   * ========================================== */
+  .card-front-light {
+    background: radial-gradient(
+      ellipse at center top,
+      hsl(var(--primary) / calc(0.1 + 0.2 * var(--glow-intensity, 0))) 0%,
+      transparent 60%
+    );
+    will-change: opacity;
+  }
+
+  .card-side-glow {
+    will-change: opacity;
+    filter: blur(25px);
+  }
+
+  /* ==========================================
+   * LENIS SMOOTH SCROLL
+   * ========================================== */
   html.lenis {
     height: auto;
   }
@@ -319,50 +450,48 @@
   }
 
   /* ==========================================
-   * Custom Scrollbar
-   * ==========================================
-   */
+   * LUXURY SCROLLBAR
+   * ========================================== */
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
   }
 
   ::-webkit-scrollbar-track {
-    background: hsl(var(--muted));
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: hsl(var(--primary) / 0.5);
-    border-radius: 3px;
+    background: hsl(var(--primary) / 0.3);
+    border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--primary) / 0.7);
+    background: hsl(var(--primary) / 0.5);
   }
 
   /* ==========================================
-   * Particle Animation Styles
-   * ==========================================
-   */
+   * PARTICLE & ORB STYLES
+   * ========================================== */
   .particle {
     will-change: transform, opacity;
     pointer-events: none;
   }
 
   /* ==========================================
-   * Card Front Lighting Effect
-   * ==========================================
-   */
-  .card-front-light {
-    background: radial-gradient(
-      ellipse at center top,
-      hsl(var(--primary) / calc(0.15 + 0.15 * var(--glow-intensity, 0))) 0%,
-      transparent 60%
-    );
-    will-change: opacity;
+   * MAGNETIC HOVER — For interactive elements
+   * ========================================== */
+  .magnetic-hover {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .card-side-glow {
-    will-change: opacity;
-    filter: blur(20px);
+  /* ==========================================
+   * LUXURY BADGE — Pill shape with glow
+   * ========================================== */
+  .luxury-badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium tracking-wider uppercase;
+    border: 1px solid hsl(var(--primary) / 0.2);
+    background: hsl(var(--primary) / 0.08);
+    color: hsl(var(--primary));
+    letter-spacing: 0.15em;
   }
 }

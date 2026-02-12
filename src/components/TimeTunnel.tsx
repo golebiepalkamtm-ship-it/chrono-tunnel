@@ -1,15 +1,15 @@
 /**
- * TimeTunnel - Main Timeline Component
+ * TimeTunnel — Ultra-Luxury Cinematic Timeline
  * 
- * Orchestrates the complete timeline experience with:
- * - Lenis smooth scrolling
- * - GSAP ScrollTrigger parallax
- * - Framer Motion for declarative UI animations
- * - CSS variable-driven dynamic effects
+ * Orchestrates the complete experience:
+ * - Split-text hero entrance
+ * - Lenis smooth scrolling + GSAP parallax
+ * - Aurora background + noise texture
+ * - Luxury glass cards with medal system
  */
 
 import { useRef, useState, useEffect, useMemo } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 import TimelineCard from "./TimelineCard";
 import ProgressBar from "./ProgressBar";
 import ParticlesBackground from "./ParticlesBackground";
@@ -17,6 +17,7 @@ import StatsHeader from "./StatsHeader";
 import useLenis from "@/hooks/useLenis";
 import useParallax from "@/hooks/useParallax";
 
+// --- DATA (unchanged) ---
 const timelineEvents = [
   {
     year: 2001,
@@ -370,27 +371,25 @@ const timelineEvents = [
 const TimeTunnel = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  // Initialize Lenis smooth scrolling
   useLenis();
-  
-  // Initialize GSAP parallax effects
   useParallax();
 
-  // Calculate stats
-  const stats = useMemo(() => {
-    let mistrz = 0;
-    let wicemistrz = 0;
-    let przodownik = 0;
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoaded(true), 300);
+    return () => clearTimeout(timer);
+  }, []);
 
+  const stats = useMemo(() => {
+    let mistrz = 0, wicemistrz = 0, przodownik = 0;
     timelineEvents.forEach((event) => {
-      event.achievements.forEach((achievement) => {
-        if (achievement.includes("Mistrz")) mistrz++;
-        if (achievement.includes("Wicemistrz")) wicemistrz++;
-        if (achievement.includes("Przodownik")) przodownik++;
+      event.achievements.forEach((a) => {
+        if (a.includes("Mistrz")) mistrz++;
+        if (a.includes("Wicemistrz")) wicemistrz++;
+        if (a.includes("Przodownik")) przodownik++;
       });
     });
-
     return { mistrz, wicemistrz, przodownik };
   }, []);
 
@@ -400,16 +399,14 @@ const TimeTunnel = () => {
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
+    stiffness: 80,
+    damping: 25,
     restDelta: 0.001,
   });
 
-  // Perspective transforms for tunnel effect
   const perspectiveZ = useTransform(smoothProgress, [0, 1], [0, -500]);
   const tunnelOpacity = useTransform(smoothProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]);
 
-  // Update active index based on scroll
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (value) => {
       const newIndex = Math.min(
@@ -423,122 +420,103 @@ const TimeTunnel = () => {
 
   const years = timelineEvents.map((e) => e.year);
 
+  // Split text for hero title
+  const titleChars = "HISTORIA OSIĄGNIĘĆ".split("");
+
   return (
     <div ref={containerRef} className="relative min-h-[400vh]">
-      {/* Fixed Background */}
+      {/* Noise texture overlay — adds analog feel */}
+      <div className="noise-overlay" />
+
+      {/* Background */}
       <div className="fixed inset-0 bg-tunnel grid-overlay -z-10" />
-      
-      {/* Parallax Background Layers - Enhanced with depth classes */}
+
+      {/* Parallax orbs */}
       <div className="fixed inset-0 -z-8 pointer-events-none overflow-hidden">
-        {/* Deep layer - slowest parallax */}
-        <div 
-          className="parallax-slow parallax-layer-deep mouse-parallax absolute w-[600px] h-[600px] rounded-full blur-3xl opacity-20"
+        <div
+          className="parallax-slow parallax-layer-deep mouse-parallax absolute w-[600px] h-[600px] rounded-full opacity-15"
           data-depth="0.2"
-          style={{ 
-            background: 'radial-gradient(circle, hsl(var(--primary) / 0.4) 0%, transparent 70%)',
-            top: '10%',
-            left: '10%',
+          style={{
+            background: 'radial-gradient(circle, hsl(var(--primary) / 0.3) 0%, transparent 70%)',
+            filter: 'blur(80px)',
+            top: '10%', left: '10%',
           }}
         />
-        <div 
-          className="parallax-slow parallax-layer-deep mouse-parallax absolute w-[500px] h-[500px] rounded-full blur-3xl opacity-15"
+        <div
+          className="parallax-slow parallax-layer-deep mouse-parallax absolute w-[500px] h-[500px] rounded-full opacity-10"
           data-depth="0.25"
           data-invert="true"
-          style={{ 
-            background: 'radial-gradient(circle, hsl(var(--glow-secondary) / 0.3) 0%, transparent 70%)',
-            top: '40%',
-            right: '5%',
+          style={{
+            background: 'radial-gradient(circle, hsl(var(--glow-tertiary) / 0.2) 0%, transparent 70%)',
+            filter: 'blur(100px)',
+            top: '40%', right: '5%',
           }}
         />
-        
-        {/* Mid layer - moderate parallax */}
-        <div 
-          className="parallax-fast parallax-layer-mid mouse-parallax absolute w-[300px] h-[300px] rounded-full blur-2xl opacity-25"
+        <div
+          className="parallax-fast parallax-layer-mid mouse-parallax absolute w-[350px] h-[350px] rounded-full opacity-20"
           data-depth="0.4"
-          style={{ 
-            background: 'radial-gradient(circle, hsl(var(--primary) / 0.5) 0%, transparent 70%)',
-            bottom: '20%',
-            left: '20%',
+          style={{
+            background: 'radial-gradient(circle, hsl(var(--primary) / 0.4) 0%, transparent 70%)',
+            filter: 'blur(60px)',
+            bottom: '20%', left: '20%',
           }}
         />
-        <div 
-          className="parallax-fast parallax-layer-mid mouse-parallax absolute w-[400px] h-[400px] rounded-full blur-2xl opacity-20"
-          data-depth="0.35"
-          data-invert="true"
-          style={{ 
-            background: 'radial-gradient(circle, hsl(var(--primary) / 0.3) 0%, transparent 70%)',
-            top: '60%',
-            right: '15%',
-          }}
-        />
-        
-        {/* Floating decorative elements - fastest response */}
-        <div 
-          className="float-parallax parallax-layer-front mouse-parallax absolute w-4 h-4 rounded-full bg-primary/40"
-          data-depth="0.6"
-          style={{ top: '15%', left: '25%' }}
-        />
-        <div 
-          className="float-parallax parallax-layer-front mouse-parallax absolute w-3 h-3 rounded-full bg-primary/30"
-          data-depth="0.7"
-          data-invert="true"
-          style={{ top: '35%', right: '30%' }}
-        />
-        <div 
-          className="float-parallax parallax-layer-front mouse-parallax absolute w-5 h-5 rounded-full bg-glow-secondary/40"
-          data-depth="0.5"
-          style={{ top: '55%', left: '15%' }}
-        />
-        <div 
-          className="float-parallax parallax-layer-front mouse-parallax absolute w-2 h-2 rounded-full bg-primary/50"
-          data-depth="0.8"
-          data-invert="true"
-          style={{ top: '75%', right: '20%' }}
-        />
-        <div 
-          className="float-parallax parallax-layer-mid mouse-parallax absolute w-6 h-6 rounded-full bg-primary/20"
-          data-depth="0.45"
-          style={{ top: '25%', right: '10%' }}
-        />
+        {/* Floating dots */}
+        {[
+          { top: '15%', left: '25%', size: 4, depth: 0.6 },
+          { top: '35%', right: '30%', size: 3, depth: 0.7 },
+          { top: '55%', left: '15%', size: 5, depth: 0.5 },
+          { top: '75%', right: '20%', size: 2, depth: 0.8 },
+        ].map((dot, i) => (
+          <div
+            key={i}
+            className="float-parallax parallax-layer-front mouse-parallax absolute rounded-full bg-primary/30"
+            data-depth={dot.depth}
+            data-invert={i % 2 === 1 ? "true" : undefined}
+            style={{
+              width: dot.size,
+              height: dot.size,
+              top: dot.top,
+              left: dot.left,
+              right: (dot as any).right,
+            }}
+          />
+        ))}
       </div>
-      
-      {/* Particles Effect */}
+
       <ParticlesBackground />
-      
-      {/* Radial Glow Effect */}
-      <motion.div 
+
+      {/* Radial center glow */}
+      <motion.div
         className="fixed inset-0 -z-5 pointer-events-none"
         style={{ opacity: tunnelOpacity }}
       >
-        <div className="absolute inset-0 bg-gradient-radial from-primary/5 via-transparent to-transparent" 
-          style={{ 
-            background: 'radial-gradient(ellipse at center, hsl(var(--primary) / 0.12) 0%, transparent 60%)' 
-          }} 
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(ellipse at center, hsl(var(--primary) / 0.08) 0%, transparent 55%)',
+          }}
         />
       </motion.div>
 
-      {/* Progress Bar */}
-      <ProgressBar 
-        years={years} 
-        activeIndex={activeIndex}
-      />
+      <ProgressBar years={years} activeIndex={activeIndex} />
 
-      {/* Tunnel Container with Enhanced Rings */}
+      {/* Tunnel rings */}
       <div className="sticky top-0 h-screen overflow-hidden tunnel-perspective">
-        <motion.div 
+        <motion.div
           className="absolute inset-0 flex items-center justify-center"
           style={{ z: perspectiveZ }}
         >
-          {/* Tunnel Rings - Now with GSAP animation classes */}
-          {[...Array(5)].map((_, i) => (
+          {[...Array(6)].map((_, i) => (
             <motion.div
               key={i}
-              className="tunnel-ring absolute border border-primary/15 rounded-full"
+              className="tunnel-ring absolute border rounded-full"
               style={{
-                width: `${(i + 1) * 30}%`,
-                height: `${(i + 1) * 30}%`,
-                transform: `translateZ(${i * -100}px)`,
-                boxShadow: `0 0 ${20 + i * 10}px hsl(var(--primary) / 0.1)`,
+                width: `${(i + 1) * 25}%`,
+                height: `${(i + 1) * 25}%`,
+                transform: `translateZ(${i * -120}px)`,
+                borderColor: `hsl(var(--primary) / ${0.06 + i * 0.02})`,
+                boxShadow: `0 0 ${30 + i * 15}px hsl(var(--primary) / ${0.03 + i * 0.01})`,
               }}
             />
           ))}
@@ -547,65 +525,108 @@ const TimeTunnel = () => {
 
       {/* Timeline Content */}
       <div className="relative z-10 pt-[50vh] pb-[50vh] px-4 md:px-16 lg:px-24 max-w-7xl mx-auto">
-        {/* Header - Hero Section with GSAP classes */}
-        <motion.div 
-          className="hero-section text-center mb-32"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ 
-            duration: 1.2, 
-            delay: 0.2,
-            ease: [0.16, 1, 0.3, 1] // expo.out
-          }}
+        
+        {/* ==========================================
+         * HERO SECTION — Cinematic Split-Text Entrance
+         * ========================================== */}
+        <motion.div
+          className="hero-section text-center mb-40"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
         >
-          <motion.h1 
-            className="hero-title font-display text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 glow-text"
-            initial={{ opacity: 0, y: 80, rotateX: 15, filter: 'blur(10px)' }}
-            animate={{ opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' }}
-            transition={{ 
-              duration: 1.4, 
-              delay: 0.3,
-              ease: [0.16, 1, 0.3, 1] // expo.out - the signature Cassie Evans feel
-            }}
-          >
-            HISTORIA OSIĄGNIĘĆ
-          </motion.h1>
-          <motion.p 
-            className="hero-subtitle text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-8"
-            initial={{ opacity: 0, y: 30, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ 
-              duration: 0.8, 
-              delay: 0.6,
-              ease: [0.33, 1, 0.68, 1] // power3.out
-            }}
-          >
-            Przewijaj czas i odkryj historię sukcesów od 2001 roku
-          </motion.p>
-          
-          {/* Stats Header with stagger animation */}
-          <StatsHeader 
-            mistrz={stats.mistrz} 
-            wicemistrz={stats.wicemistrz} 
-            przodownik={stats.przodownik} 
-          />
-          
-          {/* Scroll Indicator */}
-          <motion.div 
-            className="scroll-indicator mt-12 flex flex-col items-center gap-2"
-            initial={{ opacity: 0, y: -20 }}
+          {/* Luxury overline */}
+          <motion.div
+            className="mb-8 flex items-center justify-center gap-4"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.2 }}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           >
-            <span className="text-sm text-muted-foreground">Przewijaj aby odkryć</span>
-            <div className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex justify-center pt-2">
-              <motion.div 
-                className="w-1.5 h-3 bg-primary rounded-full"
-                animate={{ y: [0, 12, 0] }}
-                transition={{ 
-                  duration: 1.5, 
+            <div className="luxury-divider w-16" />
+            <span className="text-[10px] md:text-xs tracking-[0.3em] uppercase text-muted-foreground font-medium">
+              2001 — 2024
+            </span>
+            <div className="luxury-divider w-16" />
+          </motion.div>
+
+          {/* Split-text title — each char animates individually */}
+          <h1 className="font-display text-4xl md:text-6xl lg:text-8xl font-bold mb-6 leading-none">
+            {titleChars.map((char, i) => (
+              <motion.span
+                key={i}
+                className="split-char"
+                initial={{ 
+                  opacity: 0, 
+                  y: 80, 
+                  rotateX: 90,
+                  filter: "blur(8px)",
+                }}
+                animate={isLoaded ? { 
+                  opacity: 1, 
+                  y: 0, 
+                  rotateX: 0,
+                  filter: "blur(0px)",
+                } : {}}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.5 + i * 0.035,
+                  ease: [0.16, 1, 0.3, 1], // expo.out
+                }}
+                style={{
+                  color: char === " " ? "transparent" : undefined,
+                  width: char === " " ? "0.3em" : undefined,
+                }}
+              >
+                <span className="glow-text text-foreground">
+                  {char === " " ? "\u00A0" : char}
+                </span>
+              </motion.span>
+            ))}
+          </h1>
+
+          {/* Subtitle */}
+          <motion.p
+            className="hero-subtitle text-muted-foreground text-base md:text-lg lg:text-xl max-w-xl mx-auto mb-12 font-light tracking-wide"
+            initial={{ opacity: 0, y: 30 }}
+            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 1, delay: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          >
+            Przewijaj czas i odkryj historię sukcesów
+          </motion.p>
+
+          {/* Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 1.5, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <StatsHeader
+              mistrz={stats.mistrz}
+              wicemistrz={stats.wicemistrz}
+              przodownik={stats.przodownik}
+            />
+          </motion.div>
+
+          {/* Scroll indicator */}
+          <motion.div
+            className="scroll-indicator mt-16 flex flex-col items-center gap-3"
+            initial={{ opacity: 0 }}
+            animate={isLoaded ? { opacity: 1 } : {}}
+            transition={{ duration: 0.6, delay: 2 }}
+          >
+            <span className="text-[10px] tracking-[0.25em] uppercase text-muted-foreground/60">
+              Scroll
+            </span>
+            <div className="w-[1px] h-12 relative overflow-hidden">
+              <motion.div
+                className="w-full bg-gradient-to-b from-primary to-transparent"
+                style={{ height: "50%" }}
+                animate={{ y: ["-100%", "200%"] }}
+                transition={{
+                  duration: 2,
                   repeat: Infinity,
-                  ease: "easeInOut" // sine.inOut for organic breathing
+                  ease: [0.16, 1, 0.3, 1],
+                  repeatDelay: 0.5,
                 }}
               />
             </div>
@@ -624,21 +645,25 @@ const TimeTunnel = () => {
         ))}
 
         {/* Footer */}
-        <motion.div 
-          className="footer-section text-center pt-20"
+        <motion.div
+          className="footer-section text-center pt-24 pb-12"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 1.5 }}
           viewport={{ once: true }}
         >
-          <motion.p 
-            className="footer-text font-display text-2xl text-muted-foreground"
-            initial={{ opacity: 0, y: 40, scale: 0.95 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ 
-              duration: 1,
-              ease: [0.16, 1, 0.3, 1] // expo.out
-            }}
+          <motion.div
+            className="luxury-divider w-32 mx-auto mb-8"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            viewport={{ once: true }}
+          />
+          <motion.p
+            className="footer-text font-serif text-2xl md:text-3xl text-muted-foreground italic"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true }}
           >
             Historia trwa...
@@ -646,22 +671,22 @@ const TimeTunnel = () => {
         </motion.div>
       </div>
 
-      {/* Mobile Progress Indicator */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 md:hidden z-50">
-        <motion.div 
-          className="glass-card px-4 py-2 flex items-center gap-3"
+      {/* Mobile Progress */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 lg:hidden z-50">
+        <motion.div
+          className="glass-card px-5 py-2.5 flex items-center gap-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.5 }}
+          transition={{ duration: 0.5, delay: 2 }}
         >
-          <span className="font-display text-lg text-primary glow-text">
+          <span className="font-display text-base text-primary glow-text">
             {years[activeIndex]}
           </span>
-          <div className="w-24 h-1 rounded-full bg-muted overflow-hidden">
-            <motion.div 
-              className="h-full progress-glow progress-fill"
-              style={{ width: `${((activeIndex + 1) / years.length) * 100}%` }}
-              transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
+          <div className="w-20 h-[2px] rounded-full bg-border/30 overflow-hidden">
+            <motion.div
+              className="h-full progress-glow"
+              animate={{ width: `${((activeIndex + 1) / years.length) * 100}%` }}
+              transition={{ duration: 0.4, ease: [0.33, 1, 0.68, 1] }}
             />
           </div>
         </motion.div>
