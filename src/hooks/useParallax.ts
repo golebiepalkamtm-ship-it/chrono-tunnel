@@ -1,14 +1,17 @@
 /**
- * Professional Parallax System - Cassie Evans / Jack Doyle Style
+ * Professional Parallax System — Locomotive Scroll Edition
  * 
- * This hook creates sophisticated depth layers with premium easing curves.
- * Every animation decision is intentional and explained.
+ * Combines GSAP ScrollTrigger with Locomotive-style techniques:
+ * - data-scroll-speed: Variable parallax rates per element
+ * - Velocity-based skew/stretch distortion on cards
+ * - Clip-path reveal on viewport entry
+ * - Mouse parallax with lerp smoothing
+ * - Scroll-linked CSS variable animations
  * 
- * Core Philosophy:
- * - expo.out for dramatic reveals (long deceleration = weight)
- * - sine.inOut for organic, breathing animations
- * - Custom stagger with ease curves for non-linear timing
- * - CSS variable animation for performant glow effects
+ * Every easing choice is intentional:
+ * - expo.out: dramatic entrance weight
+ * - sine.inOut: organic breathing
+ * - power3.out: confident deceleration
  */
 
 import { useEffect, useRef, useCallback } from 'react';
@@ -22,7 +25,6 @@ export const useParallax = () => {
   const rafId = useRef<number | null>(null);
   const mousePos = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
 
-  // Smooth mouse following with lerp
   const handleMouseMove = useCallback((e: MouseEvent) => {
     mousePos.current.targetX = (e.clientX / window.innerWidth - 0.5) * 2;
     mousePos.current.targetY = (e.clientY / window.innerHeight - 0.5) * 2;
@@ -32,70 +34,103 @@ export const useParallax = () => {
     if (initialized.current) return;
     initialized.current = true;
 
-    // Global GSAP settings for performance
-    gsap.config({
-      force3D: true,
-      nullTargetWarn: false,
+    gsap.config({ force3D: true, nullTargetWarn: false });
+
+    // ==========================================
+    // DATA-SCROLL-SPEED — Locomotive's Signature
+    // Each element moves at its own rate based on data attribute
+    // speed=1 is normal, speed=2 is 2x, speed=-1 is inverse
+    // ==========================================
+    gsap.utils.toArray<HTMLElement>('[data-scroll-speed]').forEach((el) => {
+      const speed = parseFloat(el.dataset.scrollSpeed || '1');
+      const delay = parseFloat(el.dataset.scrollDelay || '0');
+
+      gsap.to(el, {
+        y: () => (speed - 1) * ScrollTrigger.maxScroll(window) * -0.1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.5 + delay,
+          invalidateOnRefresh: true,
+        },
+      });
     });
 
     // ==========================================
-    // DEEP PARALLAX LAYERS (Background Orbs)
+    // CLIP-PATH REVEALS — Cinematic Unmasking
+    // Locomotive's viewport entry with IntersectionObserver
     // ==========================================
-    // These move slowest, creating depth perception
-    // scrub: 3 means it lags 3 seconds behind scroll - feels "heavy"
+    const clipElements = document.querySelectorAll('.clip-reveal, .clip-reveal-left, .clip-reveal-right');
+    
+    const clipObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Stagger delay from data attribute
+            const delay = parseFloat((entry.target as HTMLElement).dataset.clipDelay || '0');
+            setTimeout(() => {
+              entry.target.classList.add('is-visible');
+            }, delay * 1000);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -50px 0px' }
+    );
+
+    clipElements.forEach((el) => clipObserver.observe(el));
+
+    // ==========================================
+    // DEEP PARALLAX LAYERS (Background Orbs)
+    // scrub: 3 = heavy, lagging behind scroll
+    // ==========================================
     gsap.utils.toArray<HTMLElement>('.parallax-slow').forEach((element, i) => {
-      // Each element gets slightly different timing for organic feel
       const baseSpeed = -150;
       const variation = i * 20;
 
       gsap.to(element, {
         y: baseSpeed - variation,
-        // Why no ease on scrub? We want 1:1 scroll mapping, 
-        // the scrub value itself provides smoothing
         ease: 'none',
         scrollTrigger: {
           trigger: 'body',
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 3 + i * 0.5, // Deeper elements lag more
+          scrub: 3 + i * 0.5,
         },
       });
 
-      // Subtle scale breathing - sine.inOut for organic feel
-      // Like breathing - natural acceleration/deceleration
       gsap.to(element, {
         scale: 1.1,
         opacity: 0.25,
         duration: 4 + i,
-        ease: 'sine.inOut', // Perfect for anything that should feel "alive"
+        ease: 'sine.inOut',
         repeat: -1,
         yoyo: true,
-        delay: i * 0.7, // Phase offset prevents uniform movement
+        delay: i * 0.7,
       });
     });
 
     // ==========================================
-    // MID-LAYER PARALLAX (Faster Movement)
+    // MID-LAYER PARALLAX (Faster = closer)
     // ==========================================
-    // These elements move faster, appear "closer" to viewer
     gsap.utils.toArray<HTMLElement>('.parallax-fast').forEach((element, i) => {
       gsap.to(element, {
         y: -280 - i * 30,
-        x: (i % 2 ? 1 : -1) * 40, // Alternate horizontal drift
+        x: (i % 2 ? 1 : -1) * 40,
         ease: 'none',
         scrollTrigger: {
           trigger: 'body',
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 1.5, // Faster response = closer to viewer
+          scrub: 1.5,
         },
       });
 
-      // More energetic breathing for closer elements
       gsap.to(element, {
         scale: 1.15,
         duration: 3 + i * 0.3,
-        ease: 'power2.inOut', // More pronounced acceleration
+        ease: 'power2.inOut',
         repeat: -1,
         yoyo: true,
         delay: i * 0.4,
@@ -103,24 +138,22 @@ export const useParallax = () => {
     });
 
     // ==========================================
-    // TIMELINE CARDS - THE STAR OF THE SHOW
+    // TIMELINE CARDS — Locomotive-Enhanced Entrance
+    // Combines GSAP scrub with velocity CSS vars
     // ==========================================
     gsap.utils.toArray<HTMLElement>('.timeline-parallax').forEach((card, i) => {
       const direction = i % 2 === 0 ? 1 : -1;
 
-      // Main entrance timeline - orchestrated reveal
       const cardTl = gsap.timeline({
         scrollTrigger: {
           trigger: card,
           start: 'top 90%',
           end: 'top 35%',
-          scrub: 1.5, // Smooth scrubbing
+          scrub: 1.5,
         },
       });
 
-      // Phase 1: Enter from side with rotation
-      // expo.out: Starts fast, long deceleration - creates "weight"
-      // This is the signature Cassie Evans feel
+      // Phase 1: Locomotive-style entrance with clip + transform
       cardTl.fromTo(
         card,
         {
@@ -136,12 +169,11 @@ export const useParallax = () => {
           rotateY: 0,
           scale: 1,
           filter: 'blur(0px)',
-          ease: 'expo.out', // The premium entrance curve
+          ease: 'expo.out',
         }
       );
 
-      // Animate CSS variable for dynamic glow
-      // This is more performant than animating box-shadow directly
+      // Glow intensity via CSS variable
       gsap.to(card, {
         '--glow-intensity': 1,
         ease: 'power2.inOut',
@@ -153,7 +185,7 @@ export const useParallax = () => {
         },
       });
 
-      // Exit animation - fade as it scrolls past
+      // Exit fade
       gsap.to(card, {
         '--glow-intensity': 0,
         opacity: 0.3,
@@ -172,9 +204,7 @@ export const useParallax = () => {
     // ==========================================
     // FLOATING DECORATIVE ELEMENTS
     // ==========================================
-    // These create ambient movement and depth
     gsap.utils.toArray<HTMLElement>('.float-parallax').forEach((element, i) => {
-      // Scroll-linked movement
       gsap.to(element, {
         y: `${(i % 3 + 1) * -80}`,
         x: `${((i % 2) * 2 - 1) * 50}`,
@@ -188,8 +218,6 @@ export const useParallax = () => {
         },
       });
 
-      // Independent floating animation
-      // Creates organic, "living" feel independent of scroll
       const floatTl = gsap.timeline({ repeat: -1 });
       
       floatTl.to(element, {
@@ -197,7 +225,7 @@ export const useParallax = () => {
         x: `+=${(i % 2 ? 1 : -1) * 15}`,
         rotation: `+=${(i % 2 ? 1 : -1) * 5}`,
         duration: 3 + i * 0.5,
-        ease: 'sine.inOut', // Organic breathing
+        ease: 'sine.inOut',
       });
 
       floatTl.to(element, {
@@ -208,15 +236,13 @@ export const useParallax = () => {
         ease: 'sine.inOut',
       });
 
-      // Stagger start for non-uniform animation
       floatTl.progress(i * 0.15);
     });
 
     // ==========================================
-    // TUNNEL RINGS - Depth Markers
+    // TUNNEL RINGS — Depth Markers
     // ==========================================
     gsap.utils.toArray<HTMLElement>('.tunnel-ring').forEach((ring, i) => {
-      // Pulse animation - each ring at different phase
       gsap.to(ring, {
         scale: 1.08,
         opacity: 0.35,
@@ -227,7 +253,6 @@ export const useParallax = () => {
         delay: i * 0.4,
       });
 
-      // Very slow rotation for subtle movement
       gsap.to(ring, {
         rotation: i % 2 === 0 ? 360 : -360,
         duration: 80 + i * 15,
@@ -235,7 +260,6 @@ export const useParallax = () => {
         repeat: -1,
       });
 
-      // Scroll-linked z-depth simulation
       gsap.to(ring, {
         scale: 1 + i * 0.05,
         opacity: 0.15 - i * 0.02,
@@ -250,17 +274,15 @@ export const useParallax = () => {
     });
 
     // ==========================================
-    // MOUSE PARALLAX - Interactive Layer
+    // MOUSE PARALLAX — Interactive Layer
     // ==========================================
     const mouseParallaxElements = gsap.utils.toArray<HTMLElement>('.mouse-parallax');
 
     const updateMouseParallax = () => {
-      // Lerp for buttery smooth following
-      // 0.06 = slow follow, 0.15 = snappy
       mousePos.current.x += (mousePos.current.targetX - mousePos.current.x) * 0.06;
       mousePos.current.y += (mousePos.current.targetY - mousePos.current.y) * 0.06;
 
-      mouseParallaxElements.forEach((el, i) => {
+      mouseParallaxElements.forEach((el) => {
         const depth = parseFloat(el.dataset.depth || '0.5');
         const invertX = el.dataset.invert === 'true' ? -1 : 1;
 
@@ -278,10 +300,26 @@ export const useParallax = () => {
     rafId.current = requestAnimationFrame(updateMouseParallax);
 
     // ==========================================
-    // PARTICLES - Micro-Animations
+    // WORD REVEAL — Locomotive text animation
+    // Triggers .is-visible class on viewport entry
+    // ==========================================
+    const wordRevealElements = document.querySelectorAll('.word-reveal');
+    const wordObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    wordRevealElements.forEach((el) => wordObserver.observe(el));
+
+    // ==========================================
+    // PARTICLES
     // ==========================================
     gsap.utils.toArray<HTMLElement>('.particle').forEach((particle, i) => {
-      // Random floating path for each particle
       const randomX = gsap.utils.random(-80, 80);
       const randomY = gsap.utils.random(-120, -40);
       const duration = gsap.utils.random(4, 8);
@@ -291,7 +329,7 @@ export const useParallax = () => {
         y: `+=${randomY}`,
         opacity: gsap.utils.random(0.2, 0.7),
         scale: gsap.utils.random(0.6, 1.4),
-        duration: duration,
+        duration,
         ease: 'sine.inOut',
         repeat: -1,
         yoyo: true,
@@ -302,6 +340,8 @@ export const useParallax = () => {
     // Cleanup
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      clipObserver.disconnect();
+      wordObserver.disconnect();
       window.removeEventListener('mousemove', handleMouseMove);
       if (rafId.current) cancelAnimationFrame(rafId.current);
     };

@@ -450,6 +450,157 @@
   }
 
   /* ==========================================
+   * LOCOMOTIVE SCROLL — Velocity-Reactive Transforms
+   * 
+   * These classes react to --scroll-velocity CSS variable
+   * set by useLenis hook. Pure CSS = zero JS overhead.
+   * ========================================== */
+
+  /* Velocity-based skew — elements tilt in scroll direction */
+  .scroll-skew {
+    transform: skewY(calc(var(--scroll-velocity-raw, 0) * 0.8deg));
+    transition: transform 0.1s linear;
+    will-change: transform;
+  }
+
+  /* Velocity-based stretch — cinematic speed distortion */
+  .scroll-stretch {
+    transform: scaleY(calc(1 + var(--scroll-velocity, 0) * 0.06));
+    transition: transform 0.15s linear;
+    will-change: transform;
+  }
+
+  /* Velocity-based blur — fast scrolling = motion blur */
+  .scroll-blur {
+    filter: blur(calc(var(--scroll-velocity, 0) * 3px));
+    transition: filter 0.2s linear;
+    will-change: filter;
+  }
+
+  /* Velocity-based opacity fade — fast = ghostly */
+  .scroll-fade {
+    opacity: calc(1 - var(--scroll-velocity, 0) * 0.4);
+    transition: opacity 0.2s linear;
+  }
+
+  /* Combined Locomotive transform — the full effect */
+  .scroll-locomotive {
+    transform: 
+      skewY(calc(var(--scroll-velocity-raw, 0) * 0.6deg))
+      scaleY(calc(1 + var(--scroll-velocity, 0) * 0.04))
+      translateY(calc(var(--scroll-velocity-raw, 0) * -2px));
+    will-change: transform;
+    transition: transform 0.05s linear;
+  }
+
+  /* ==========================================
+   * DATA-SCROLL-SPEED — Variable Parallax Rate
+   * Mimics Locomotive's data-scroll-speed attribute
+   * Applied via GSAP in useParallax hook
+   * ========================================== */
+  [data-scroll-speed] {
+    will-change: transform;
+  }
+
+  /* ==========================================
+   * CLIP-PATH REVEALS — Cinematic Unmasking
+   * Locomotive-style viewport entry animations
+   * ========================================== */
+  .clip-reveal {
+    clip-path: inset(100% 0% 0% 0%);
+    transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .clip-reveal.is-visible {
+    clip-path: inset(0% 0% 0% 0%);
+  }
+
+  .clip-reveal-left {
+    clip-path: inset(0% 100% 0% 0%);
+    transition: clip-path 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .clip-reveal-left.is-visible {
+    clip-path: inset(0% 0% 0% 0%);
+  }
+
+  .clip-reveal-right {
+    clip-path: inset(0% 0% 0% 100%);
+    transition: clip-path 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .clip-reveal-right.is-visible {
+    clip-path: inset(0% 0% 0% 0%);
+  }
+
+  /* ==========================================
+   * SCROLL SPEED INDICATOR — Visual velocity feedback
+   * ========================================== */
+  .scroll-speed-line {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--primary) / calc(var(--scroll-velocity, 0) * 0.8)),
+      transparent
+    );
+    transform: scaleX(var(--scroll-velocity, 0));
+    transform-origin: center;
+    z-index: 9998;
+    pointer-events: none;
+    transition: transform 0.15s linear;
+  }
+
+  /* ==========================================
+   * HORIZONTAL SCROLL SECTION
+   * ========================================== */
+  .horizontal-scroll-container {
+    display: flex;
+    flex-wrap: nowrap;
+    will-change: transform;
+  }
+
+  .horizontal-scroll-panel {
+    flex-shrink: 0;
+    will-change: transform;
+  }
+
+  /* ==========================================
+   * STAGGER WORD REVEAL — Locomotive text effect
+   * ========================================== */
+  .word-reveal .word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+  }
+
+  .word-reveal .word-inner {
+    display: inline-block;
+    transform: translateY(110%);
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .word-reveal.is-visible .word-inner {
+    transform: translateY(0%);
+  }
+
+  /* ==========================================
+   * SCROLL PROGRESS SECTIONS — Locomotive style
+   * Elements that pin and progress through scroll
+   * ========================================== */
+  .scroll-section {
+    will-change: transform, opacity;
+  }
+
+  .scroll-section[data-scroll-section] {
+    transform: translateZ(0);
+  }
+
+  /* ==========================================
    * LUXURY SCROLLBAR
    * ========================================== */
   ::-webkit-scrollbar {
