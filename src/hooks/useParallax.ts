@@ -41,22 +41,8 @@ export const useParallax = () => {
     // Each element moves at its own rate based on data attribute
     // speed=1 is normal, speed=2 is 2x, speed=-1 is inverse
     // ==========================================
-    gsap.utils.toArray<HTMLElement>('[data-scroll-speed]').forEach((el) => {
-      const speed = parseFloat(el.dataset.scrollSpeed || '1');
-      const delay = parseFloat(el.dataset.scrollDelay || '0');
-
-      gsap.to(el, {
-        y: () => (speed - 1) * ScrollTrigger.maxScroll(window) * -0.1,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1.5 + delay,
-          invalidateOnRefresh: true,
-        },
-      });
-    });
+    // Data-scroll-speed elements (skip if none exist)
+    // Removed to avoid conflicts with Framer Motion cards
 
     // ==========================================
     // CLIP-PATH REVEALS — Cinematic Unmasking
@@ -85,121 +71,18 @@ export const useParallax = () => {
     // DEEP PARALLAX LAYERS (Background Orbs)
     // scrub: 3 = heavy, lagging behind scroll
     // ==========================================
-    gsap.utils.toArray<HTMLElement>('.parallax-slow').forEach((element, i) => {
-      const baseSpeed = -150;
-      const variation = i * 20;
-
-      gsap.to(element, {
-        y: baseSpeed - variation,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: 'body',
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 3 + i * 0.5,
-        },
-      });
-
-      gsap.to(element, {
-        scale: 1.1,
-        opacity: 0.25,
-        duration: 4 + i,
-        ease: 'sine.inOut',
-        repeat: -1,
-        yoyo: true,
-        delay: i * 0.7,
-      });
-    });
+    // Background parallax layers removed — using static CSS orbs for performance
 
     // ==========================================
     // MID-LAYER PARALLAX (Faster = closer)
     // ==========================================
-    gsap.utils.toArray<HTMLElement>('.parallax-fast').forEach((element, i) => {
-      gsap.to(element, {
-        y: -280 - i * 30,
-        x: (i % 2 ? 1 : -1) * 40,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: 'body',
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 1.5,
-        },
-      });
-
-      gsap.to(element, {
-        scale: 1.15,
-        duration: 3 + i * 0.3,
-        ease: 'power2.inOut',
-        repeat: -1,
-        yoyo: true,
-        delay: i * 0.4,
-      });
-    });
+    // Mid-layer parallax removed — using static CSS orbs for performance
 
     // ==========================================
     // TIMELINE CARDS — Locomotive-Enhanced Entrance
     // Combines GSAP scrub with velocity CSS vars
     // ==========================================
-    gsap.utils.toArray<HTMLElement>('.timeline-parallax').forEach((card, i) => {
-      const direction = i % 2 === 0 ? 1 : -1;
-
-      const cardTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: card,
-          start: 'top 90%',
-          end: 'top 35%',
-          scrub: 1.5,
-        },
-      });
-
-      // Phase 1: Locomotive-style entrance with clip + transform
-      cardTl.fromTo(
-        card,
-        {
-          x: direction * 180,
-          opacity: 0,
-          rotateY: direction * 25,
-          scale: 0.85,
-          filter: 'blur(12px)',
-        },
-        {
-          x: 0,
-          opacity: 1,
-          rotateY: 0,
-          scale: 1,
-          filter: 'blur(0px)',
-          ease: 'expo.out',
-        }
-      );
-
-      // Glow intensity via CSS variable
-      gsap.to(card, {
-        '--glow-intensity': 1,
-        ease: 'power2.inOut',
-        scrollTrigger: {
-          trigger: card,
-          start: 'top 70%',
-          end: 'top 40%',
-          scrub: 1,
-        },
-      });
-
-      // Exit fade
-      gsap.to(card, {
-        '--glow-intensity': 0,
-        opacity: 0.3,
-        scale: 0.95,
-        filter: 'blur(4px)',
-        ease: 'power2.in',
-        scrollTrigger: {
-          trigger: card,
-          start: 'bottom 40%',
-          end: 'bottom 10%',
-          scrub: 1,
-        },
-      });
-    });
+    // Timeline card GSAP animations removed — Framer Motion whileInView handles this now
 
     // ==========================================
     // FLOATING DECORATIVE ELEMENTS

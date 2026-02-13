@@ -434,12 +434,10 @@ const TimeTunnel = () => {
       {/* Background */}
       <div className="fixed inset-0 bg-tunnel grid-overlay -z-10" />
 
-      {/* Parallax orbs — with data-scroll-speed for variable rates */}
+      {/* Simplified parallax orbs — CSS only */}
       <div className="fixed inset-0 -z-8 pointer-events-none overflow-hidden">
         <div
-          className="parallax-slow parallax-layer-deep mouse-parallax absolute w-[600px] h-[600px] rounded-full opacity-15"
-          data-depth="0.2"
-          data-scroll-speed="0.3"
+          className="absolute w-[500px] h-[500px] rounded-full opacity-10"
           style={{
             background: 'radial-gradient(circle, hsl(var(--primary) / 0.3) 0%, transparent 70%)',
             filter: 'blur(80px)',
@@ -447,48 +445,13 @@ const TimeTunnel = () => {
           }}
         />
         <div
-          className="parallax-slow parallax-layer-deep mouse-parallax absolute w-[500px] h-[500px] rounded-full opacity-10"
-          data-depth="0.25"
-          data-invert="true"
-          data-scroll-speed="0.5"
+          className="absolute w-[400px] h-[400px] rounded-full opacity-8"
           style={{
             background: 'radial-gradient(circle, hsl(var(--glow-tertiary) / 0.2) 0%, transparent 70%)',
             filter: 'blur(100px)',
             top: '40%', right: '5%',
           }}
         />
-        <div
-          className="parallax-fast parallax-layer-mid mouse-parallax absolute w-[350px] h-[350px] rounded-full opacity-20"
-          data-depth="0.4"
-          data-scroll-speed="0.8"
-          style={{
-            background: 'radial-gradient(circle, hsl(var(--primary) / 0.4) 0%, transparent 70%)',
-            filter: 'blur(60px)',
-            bottom: '20%', left: '20%',
-          }}
-        />
-        {/* Floating dots with variable scroll speeds */}
-        {[
-          { top: '15%', left: '25%', size: 4, depth: 0.6, speed: '1.5' },
-          { top: '35%', right: '30%', size: 3, depth: 0.7, speed: '2' },
-          { top: '55%', left: '15%', size: 5, depth: 0.5, speed: '1.2' },
-          { top: '75%', right: '20%', size: 2, depth: 0.8, speed: '2.5' },
-        ].map((dot, i) => (
-          <div
-            key={i}
-            className="float-parallax parallax-layer-front mouse-parallax absolute rounded-full bg-primary/30"
-            data-depth={dot.depth}
-            data-scroll-speed={dot.speed}
-            data-invert={i % 2 === 1 ? "true" : undefined}
-            style={{
-              width: dot.size,
-              height: dot.size,
-              top: dot.top,
-              left: dot.left,
-              right: (dot as any).right,
-            }}
-          />
-        ))}
       </div>
 
       <ParticlesBackground />
@@ -644,7 +607,7 @@ const TimeTunnel = () => {
 
         {/* Timeline Cards — with scroll-locomotive class for velocity distortion */}
         {timelineEvents.map((event, index) => (
-          <div key={event.year} className="timeline-parallax scroll-locomotive">
+          <div key={event.year}>
             <TimelineCard
               event={event}
               index={index}
