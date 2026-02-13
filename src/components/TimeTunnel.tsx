@@ -428,14 +428,18 @@ const TimeTunnel = () => {
       {/* Noise texture overlay — adds analog feel */}
       <div className="noise-overlay" />
 
+      {/* Scroll speed indicator line — Locomotive signature */}
+      <div className="scroll-speed-line" />
+
       {/* Background */}
       <div className="fixed inset-0 bg-tunnel grid-overlay -z-10" />
 
-      {/* Parallax orbs */}
+      {/* Parallax orbs — with data-scroll-speed for variable rates */}
       <div className="fixed inset-0 -z-8 pointer-events-none overflow-hidden">
         <div
           className="parallax-slow parallax-layer-deep mouse-parallax absolute w-[600px] h-[600px] rounded-full opacity-15"
           data-depth="0.2"
+          data-scroll-speed="0.3"
           style={{
             background: 'radial-gradient(circle, hsl(var(--primary) / 0.3) 0%, transparent 70%)',
             filter: 'blur(80px)',
@@ -446,6 +450,7 @@ const TimeTunnel = () => {
           className="parallax-slow parallax-layer-deep mouse-parallax absolute w-[500px] h-[500px] rounded-full opacity-10"
           data-depth="0.25"
           data-invert="true"
+          data-scroll-speed="0.5"
           style={{
             background: 'radial-gradient(circle, hsl(var(--glow-tertiary) / 0.2) 0%, transparent 70%)',
             filter: 'blur(100px)',
@@ -455,23 +460,25 @@ const TimeTunnel = () => {
         <div
           className="parallax-fast parallax-layer-mid mouse-parallax absolute w-[350px] h-[350px] rounded-full opacity-20"
           data-depth="0.4"
+          data-scroll-speed="0.8"
           style={{
             background: 'radial-gradient(circle, hsl(var(--primary) / 0.4) 0%, transparent 70%)',
             filter: 'blur(60px)',
             bottom: '20%', left: '20%',
           }}
         />
-        {/* Floating dots */}
+        {/* Floating dots with variable scroll speeds */}
         {[
-          { top: '15%', left: '25%', size: 4, depth: 0.6 },
-          { top: '35%', right: '30%', size: 3, depth: 0.7 },
-          { top: '55%', left: '15%', size: 5, depth: 0.5 },
-          { top: '75%', right: '20%', size: 2, depth: 0.8 },
+          { top: '15%', left: '25%', size: 4, depth: 0.6, speed: '1.5' },
+          { top: '35%', right: '30%', size: 3, depth: 0.7, speed: '2' },
+          { top: '55%', left: '15%', size: 5, depth: 0.5, speed: '1.2' },
+          { top: '75%', right: '20%', size: 2, depth: 0.8, speed: '2.5' },
         ].map((dot, i) => (
           <div
             key={i}
             className="float-parallax parallax-layer-front mouse-parallax absolute rounded-full bg-primary/30"
             data-depth={dot.depth}
+            data-scroll-speed={dot.speed}
             data-invert={i % 2 === 1 ? "true" : undefined}
             style={{
               width: dot.size,
@@ -501,10 +508,10 @@ const TimeTunnel = () => {
 
       <ProgressBar years={years} activeIndex={activeIndex} />
 
-      {/* Tunnel rings */}
+      {/* Tunnel rings — with scroll-stretch for velocity distortion */}
       <div className="sticky top-0 h-screen overflow-hidden tunnel-perspective">
         <motion.div
-          className="absolute inset-0 flex items-center justify-center"
+          className="absolute inset-0 flex items-center justify-center scroll-stretch"
           style={{ z: perspectiveZ }}
         >
           {[...Array(6)].map((_, i) => (
@@ -528,6 +535,7 @@ const TimeTunnel = () => {
         
         {/* ==========================================
          * HERO SECTION — Cinematic Split-Text Entrance
+         * with Locomotive clip-path reveal
          * ========================================== */}
         <motion.div
           className="hero-section text-center mb-40"
@@ -535,9 +543,10 @@ const TimeTunnel = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          {/* Luxury overline */}
+          {/* Luxury overline with clip reveal */}
           <motion.div
-            className="mb-8 flex items-center justify-center gap-4"
+            className="mb-8 flex items-center justify-center gap-4 clip-reveal"
+            data-clip-delay="0.2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
@@ -570,7 +579,7 @@ const TimeTunnel = () => {
                 transition={{
                   duration: 0.8,
                   delay: 0.5 + i * 0.035,
-                  ease: [0.16, 1, 0.3, 1], // expo.out
+                  ease: [0.16, 1, 0.3, 1],
                 }}
                 style={{
                   color: char === " " ? "transparent" : undefined,
@@ -584,7 +593,7 @@ const TimeTunnel = () => {
             ))}
           </h1>
 
-          {/* Subtitle */}
+          {/* Subtitle — word reveal effect */}
           <motion.p
             className="hero-subtitle text-muted-foreground text-base md:text-lg lg:text-xl max-w-xl mx-auto mb-12 font-light tracking-wide"
             initial={{ opacity: 0, y: 30 }}
@@ -633,9 +642,9 @@ const TimeTunnel = () => {
           </motion.div>
         </motion.div>
 
-        {/* Timeline Cards */}
+        {/* Timeline Cards — with scroll-locomotive class for velocity distortion */}
         {timelineEvents.map((event, index) => (
-          <div key={event.year} className="timeline-parallax">
+          <div key={event.year} className="timeline-parallax scroll-locomotive">
             <TimelineCard
               event={event}
               index={index}
@@ -644,9 +653,10 @@ const TimeTunnel = () => {
           </div>
         ))}
 
-        {/* Footer */}
+        {/* Footer — clip-path reveal */}
         <motion.div
-          className="footer-section text-center pt-24 pb-12"
+          className="footer-section text-center pt-24 pb-12 clip-reveal"
+          data-clip-delay="0.3"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 1.5 }}

@@ -85,9 +85,9 @@ const TimelineCard = ({ event, index, isActive }: TimelineCardProps) => {
           </span>
         </motion.div>
 
-        {/* Content Card — Luxury Glass */}
+        {/* Content Card — Luxury Glass with scroll-skew */}
         <motion.div
-          className={`glass-card p-8 md:p-10 w-full md:w-[60%] lg:w-[55%] relative z-10
+          className={`glass-card scroll-skew p-8 md:p-10 w-full md:w-[60%] lg:w-[55%] relative z-10
             ${isEven ? 'md:ml-auto' : 'md:mr-auto'}`}
           whileHover={{
             scale: 1.015,
@@ -131,9 +131,10 @@ const TimelineCard = ({ event, index, isActive }: TimelineCardProps) => {
             Sezon {event.year}
           </motion.div>
 
-          {/* Title */}
+          {/* Title — clip-path reveal */}
           <motion.h3
-            className="text-xl md:text-2xl lg:text-3xl font-serif font-bold text-foreground mb-1 leading-tight"
+            className={`text-xl md:text-2xl lg:text-3xl font-serif font-bold text-foreground mb-1 leading-tight ${isEven ? 'clip-reveal-left' : 'clip-reveal-right'}`}
+            data-clip-delay={`${0.1 + index * 0.02}`}
             initial={{ opacity: 0, y: 25, filter: "blur(4px)" }}
             whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
@@ -165,8 +166,8 @@ const TimelineCard = ({ event, index, isActive }: TimelineCardProps) => {
             style={{ transformOrigin: isEven ? "left" : "right" }}
           />
 
-          {/* Achievements — staggered kinetic reveal */}
-          <ul className="space-y-2 text-sm">
+          {/* Achievements — staggered kinetic reveal with scroll-fade */}
+          <ul className="space-y-2 text-sm scroll-fade">
             {event.achievements.map((achievement, i) => {
               const rank = getRank(achievement);
               return (
